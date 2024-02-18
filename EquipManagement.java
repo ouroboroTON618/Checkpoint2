@@ -11,8 +11,8 @@ public class EquipManagement {
         System.out.println("4. Rent equipment");
         System.out.println("5. Return equipment");
         System.out.println("6. Schedule delivery of equipment");
-        System.out.println("6. Schedule pickup of equipment:");
-        System.out.println("7. Exit");
+        System.out.println("7. Schedule pickup of equipment:");
+        System.out.println("8. Exit");
         System.out.print("Option: ");
     }
 
@@ -40,6 +40,8 @@ public class EquipManagement {
                 case 6:
                     break;
                 case 7:
+                    break;
+                case 8:
                     System.out.println("Exiting program...");
                     exit = true;
                     break;
