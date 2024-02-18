@@ -2,6 +2,9 @@ import java.util.Scanner;
 
 public class EquipManagement {
 
+    /*
+     * Menu with all options for the user
+     */
     public static void MenuPrompt() {
         System.out.println("Welcome to the equipment renting store!");
         System.out.println("Choose one of the following menu options:");
@@ -17,6 +20,7 @@ public class EquipManagement {
     }
 
     public static void main(String[] args) {
+        EquipDatabase equipmentList = new EquipDatabase();
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         int option;
@@ -45,6 +49,7 @@ public class EquipManagement {
                     System.out.println("Exiting program...");
                     exit = true;
                     break;
+                default: System.out.println("Invalid option. Try again");
             }
         }
 
