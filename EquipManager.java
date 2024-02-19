@@ -27,4 +27,14 @@ public class EquipManager {
         System.out.println("ERROR: Equipment NOT found");
         return null;
     }
+
+    public ArrayList<Equipment> GetListOfType(String givenType) {
+        ArrayList<Equipment> equipTypeList = new ArrayList<Equipment>();
+        for (Equipment equipment : equipmentList) { 
+            if (equipment.getType().equals(givenType)) {
+                equipTypeList.add(equipment);
+            }
+        }
+        return equipTypeList;
+    }
 }
