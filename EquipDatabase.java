@@ -14,4 +14,17 @@ public class EquipDatabase {
     public void DeleteEquipment(int serialNumber) {
         equipmentList.removeIf(equipment -> equipment.getSerialNumber() == (serialNumber));
     }
+
+    public Equipment SearchEquipment(int serialNumber) {
+        for (Equipment equipment : equipmentList) {
+            if (equipment.getSerialNumber() == (serialNumber)) {
+                System.out.println("Equipment found!");
+                System.out.println();
+                return equipment;
+            }
+        }
+
+        System.out.println("ERROR: Equipment NOT found");
+        return null;
+    }
 }

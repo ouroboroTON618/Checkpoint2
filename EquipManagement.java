@@ -2,11 +2,25 @@ import java.util.Scanner;
 
 public class EquipManagement {
 
+    private static void SearchRecord(Scanner scanner, EquipDatabase equipmentList) {
+        System.out.println("Enter serial number of record to search: ");
+        equipmentList.SearchEquipment(scanner.nextInt());
+    }
+
+    private static void AddRecord(Scanner scanner, EquipDatabase equipmentList) {
+        Equipment newEquip = EquipmentFactory.GenerateEquip(scanner);
+        equipmentList.AddEquipment(newEquip);
+    }
+
+    private static void DeleteRecord(Scanner scanner, EquipDatabase equipmentList) {
+        System.out.println("Enter serial number of record to delete: ");
+        equipmentList.DeleteEquipment(scanner.nextInt());
+    }
+
     /*
      * Menu with all options for the user
      */
-    public static void MenuPrompt() {
-        System.out.println("Welcome to the equipment renting store!");
+    private static void DisplayMenuPrompt() {
         System.out.println("Choose one of the following menu options:");
         System.out.println("1. Add new records");
         System.out.println("2. Edit/delete records");
@@ -26,16 +40,20 @@ public class EquipManagement {
         int option;
 
         while (!exit) {
-            MenuPrompt();
+            DisplayMenuPrompt();
             option = scanner.nextInt();
             System.out.println();
 
+            
             switch(option) {
                 case 1:
+                    AddRecord(scanner, equipmentList);
                     break;
                 case 2:
+                    DeleteRecord(scanner, equipmentList);
                     break;
                 case 3:
+                    SearchRecord(scanner, equipmentList);
                     break;
                 case 4:
                     break;
@@ -49,7 +67,7 @@ public class EquipManagement {
                     System.out.println("Exiting program...");
                     exit = true;
                     break;
-                default: System.out.println("Invalid option. Try again");
+                default: System.out.println("Invalid option. Try again!");
             }
         }
 
