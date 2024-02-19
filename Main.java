@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
-public class EquipManagement {
+public class Main {
 
     /*
      * Find if a given record exists
      */
-    private static void SearchRecord(Scanner scanner, EquipDatabase equipmentList) {
+    private static void SearchRecord(Scanner scanner, EquipManager equipmentList) {
         System.out.println("Enter serial number of record to search: ");
         equipmentList.SearchEquipment(scanner.nextInt());
     }
@@ -13,7 +13,7 @@ public class EquipManagement {
     /*
      * Add a new record to database
      */
-    private static void AddRecord(Scanner scanner, EquipDatabase equipmentList) {
+    private static void AddRecord(Scanner scanner, EquipManager equipmentList) {
         Equipment newEquip = EquipmentFactory.GenerateEquip(scanner);
         equipmentList.AddEquipment(newEquip);
     }
@@ -21,7 +21,7 @@ public class EquipManagement {
     /*
      * Delete record from database
      */
-    private static void DeleteRecord(Scanner scanner, EquipDatabase equipmentList) {
+    private static void DeleteRecord(Scanner scanner, EquipManager equipmentList) {
         System.out.println("Enter serial number of record to delete: ");
         equipmentList.DeleteEquipment(scanner.nextInt());
     }
@@ -43,7 +43,7 @@ public class EquipManagement {
     }
 
     public static void main(String[] args) {
-        EquipDatabase equipmentList = new EquipDatabase();
+        EquipManager equipmentList = new EquipManager();
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         int option;

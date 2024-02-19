@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class EquipDatabase {
+public class EquipManager {
     ArrayList<Equipment> equipmentList = new ArrayList<Equipment>();
     
     public void EquipmentManager() {
