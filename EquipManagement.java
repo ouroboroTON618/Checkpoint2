@@ -2,16 +2,25 @@ import java.util.Scanner;
 
 public class EquipManagement {
 
+    /*
+     * Find if a given record exists
+     */
     private static void SearchRecord(Scanner scanner, EquipDatabase equipmentList) {
         System.out.println("Enter serial number of record to search: ");
         equipmentList.SearchEquipment(scanner.nextInt());
     }
 
+    /*
+     * Add a new record to database
+     */
     private static void AddRecord(Scanner scanner, EquipDatabase equipmentList) {
         Equipment newEquip = EquipmentFactory.GenerateEquip(scanner);
         equipmentList.AddEquipment(newEquip);
     }
 
+    /*
+     * Delete record from database
+     */
     private static void DeleteRecord(Scanner scanner, EquipDatabase equipmentList) {
         System.out.println("Enter serial number of record to delete: ");
         equipmentList.DeleteEquipment(scanner.nextInt());
