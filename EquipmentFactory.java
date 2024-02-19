@@ -9,7 +9,7 @@ public class EquipmentFactory {
         int serialNumber;
         String manufacturer;
         String type;
-        System.out.println("Answer the following questions:");
+        System.out.println("Input equipment details:");
         System.out.println("Serial Number: ");
         serialNumber = scanner.nextInt();
 
