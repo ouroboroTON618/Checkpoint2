@@ -24,4 +24,8 @@ public class Equipment {
         return serialNumber;
     }
 
+    public String getType() {
+        return type;
+    }
+
 }
