@@ -2,6 +2,8 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static RentEquipmentPage rentPage;
+
     /*
      * Find if a given record exists
      */
@@ -24,6 +26,10 @@ public class Main {
     private static void DeleteRecord(Scanner scanner, EquipManager equipmentList) {
         System.out.println("Enter serial number of record to delete: ");
         equipmentList.DeleteEquipment(scanner.nextInt());
+    }
+
+    private static void RentEquipment() {
+        rentPage = new RentEquipmentPage();
     }
 
     /*
@@ -53,8 +59,7 @@ public class Main {
             option = scanner.nextInt();
             System.out.println();
 
-            
-            switch(option) {
+            switch (option) {
                 case 1:
                     AddRecord(scanner, equipmentList);
                     break;
@@ -76,7 +81,8 @@ public class Main {
                     System.out.println("Exiting program...");
                     exit = true;
                     break;
-                default: System.out.println("Invalid option. Try again!");
+                default:
+                    System.out.println("Invalid option. Try again!");
             }
             System.out.println();
         }
