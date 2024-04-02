@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Main {
 
     private static RentEquipmentPage rentPage;
+    private static EditDeleteRecordsPage editDeletePage;
 
     /*
      * Find if a given record exists
@@ -23,9 +24,9 @@ public class Main {
     /*
      * Delete record from database
      */
-    private static void DeleteRecord(Scanner scanner, EquipManager equipmentList) {
-        System.out.println("Enter serial number of record to delete: ");
-        equipmentList.DeleteEquipment(scanner.nextInt());
+    private static void EditDeleteRecord(Scanner scanner, EquipManager equipmentList) {
+        editDeletePage = new EditDeleteRecordsPage(equipmentList);
+
     }
 
     private static void RentEquipment() {
@@ -65,7 +66,7 @@ public class Main {
                     AddRecord(scanner, equipmentList);
                     break;
                 case 2:
-                    DeleteRecord(scanner, equipmentList);
+                    EditDeleteRecord(scanner, equipmentList);
                     break;
                 case 3:
                     SearchRecord(scanner, equipmentList);
