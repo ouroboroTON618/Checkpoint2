@@ -1,5 +1,5 @@
 public class Equipment {
-    
+
     private int serialNumber;
     private String manufacturer;
     private String type;
@@ -12,7 +12,7 @@ public class Equipment {
     private int warrExpr;
     private int year;
     private int rentRate;
-    private boolean status; 
+    private boolean status;
 
     public Equipment(int serialNumber, String manufacturer, String type) {
         this.serialNumber = serialNumber;

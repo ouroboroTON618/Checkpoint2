@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class EquipManager {
     ArrayList<Equipment> equipmentList = new ArrayList<Equipment>();
-    
+
     public void EquipmentManager() {
         this.equipmentList = new ArrayList<>();
     }
@@ -30,7 +30,7 @@ public class EquipManager {
 
     public ArrayList<Equipment> GetListOfType(String givenType) {
         ArrayList<Equipment> equipTypeList = new ArrayList<Equipment>();
-        for (Equipment equipment : equipmentList) { 
+        for (Equipment equipment : equipmentList) {
             if (equipment.getType().equals(givenType)) {
                 equipTypeList.add(equipment);
             }

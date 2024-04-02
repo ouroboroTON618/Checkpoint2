@@ -18,9 +18,8 @@ public class EquipmentFactory {
 
         System.out.println("type: ");
         type = scanner.next();
-        
+
         return CreateEquipment(serialNumber, manufacturer, type);
     }
-
 
 }

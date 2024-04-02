@@ -44,7 +44,8 @@ public class Main {
         System.out.println("5. Return equipment");
         System.out.println("6. Schedule delivery of equipment");
         System.out.println("7. Schedule pickup of equipment:");
-        System.out.println("8. Exit");
+        System.out.println("9. Useful Reports");
+        System.out.println("10. Exit");
         System.out.print("Option: ");
     }
 
@@ -70,14 +71,18 @@ public class Main {
                     SearchRecord(scanner, equipmentList);
                     break;
                 case 4:
+                    RentEquipment();
                     break;
                 case 5:
+                    RentEquipment();
                     break;
                 case 6:
+                    RentEquipment();
                     break;
                 case 7:
+                    RentEquipment();
                     break;
-                case 8:
+                case 10:
                     System.out.println("Exiting program...");
                     exit = true;
                     break;
