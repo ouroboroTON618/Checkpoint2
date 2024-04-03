@@ -66,61 +66,72 @@ public class UsefulReportsPage {
 
     private void RentingCheckouts() {
         // CALL QUERY MANAGER
-        // results in format of:
-        // header: string[]
-        // data: string[][]
 
-        // call table generator
+        System.out.println("Enter the member ID: ");
+
+        // Assuming its valid
+        String member_ID = scanner.nextLine();
+
+        ResultPackage result = QueryManager.getRentingCheckouts(member_ID);
+        String[] header = result.getHeaderFields();
+        String[][] data = result.getTableData();
+
+        TableDisplayGenerator.GenerateTableWithData(header, data);
     }
 
     private void PopularItem() {
-        // CALL QUERY MANAGER
-        // CALL QUERY MANAGER
-        // results in format of:
-        // header: string[]
-        // data: string[][]
 
         // call table generator
+        ResultPackage result = QueryManager.getItemsCheckedOut();
+        String[] header = result.getHeaderFields();
+        String[][] data = result.getTableData();
+
+        TableDisplayGenerator.GenerateTableWithData(header, data);
     }
 
     private void PopularManufacturer() {
-        // CALL QUERY MANAGER
-        // CALL QUERY MANAGER
-        // results in format of:
-        // header: string[]
-        // data: string[][]
-
+        ResultPackage result = QueryManager.getPopularManufacturer();
         // call table generator
+        String[] header = result.getHeaderFields();
+        String[][] data = result.getTableData();
+
+        TableDisplayGenerator.GenerateTableWithData(header, data);
     }
 
     private void PopularDrone() {
-        // CALL QUERY MANAGER
-        // CALL QUERY MANAGER
-        // results in format of:
-        // header: string[]
-        // data: string[][]
-
+        ResultPackage result = QueryManager.getPopularDrone();
         // call table generator
+        String[] header = result.getHeaderFields();
+        String[][] data = result.getTableData();
+
+        TableDisplayGenerator.GenerateTableWithData(header, data);
     }
 
     private void ItemsCheckedOut() {
-        // CALL QUERY MANAGER
-        // CALL QUERY MANAGER
-        // results in format of:
-        // header: string[]
-        // data: string[][]
 
+        ResultPackage result = QueryManager.getItemsCheckedOut();
         // call table generator
+        String[] header = result.getHeaderFields();
+        String[][] data = result.getTableData();
+
+        TableDisplayGenerator.GenerateTableWithData(header, data);
     }
 
     private void EquipmentByTypeOfEquipment() {
-        // CALL QUERY MANAGER
-        // CALL QUERY MANAGER
-        // results in format of:
-        // header: string[]
-        // data: string[][]
+        System.out.println("Enter the Year: ");
+        String year = scanner.nextLine();
+        System.out.println("Enter the Type of Equipement: ");
+        // Assuming its valid
+        String type = scanner.nextLine();
 
+        int yearNum = Integer.parseInt(year);
+
+        ResultPackage result = QueryManager.getEquipmentByTypeOfEquipment(yearNum, type);
         // call table generator
+        String[] header = result.getHeaderFields();
+        String[][] data = result.getTableData();
+
+        TableDisplayGenerator.GenerateTableWithData(header, data);
     }
 
 }

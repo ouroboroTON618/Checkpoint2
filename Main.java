@@ -1,9 +1,11 @@
 import java.util.Scanner;
+import java.sql.Connection;
 
 public class Main {
 
     private static RentEquipmentPage rentPage;
     private static EditDeleteRecordsPage editDeletePage;
+    public static Connection conn;
 
     /*
      * Find if a given record exists
@@ -56,6 +58,9 @@ public class Main {
         boolean exit = false;
         int option;
 
+        QueryConnection connectionManager = new QueryConnection();
+        conn = connectionManager.GetConnection();
+
         while (!exit) {
             DisplayMenuPrompt();
             option = scanner.nextInt();
@@ -86,6 +91,7 @@ public class Main {
                 case 10:
                     System.out.println("Exiting program...");
                     exit = true;
+                    connectionManager.closeConnection(exit);
                     break;
                 default:
                     System.out.println("Invalid option. Try again!");

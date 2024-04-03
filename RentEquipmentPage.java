@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Scanner;
+import java.sql.Connection;
 
 public class RentEquipmentPage {
 
