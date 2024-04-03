@@ -1,24 +1,26 @@
 import java.util.Scanner;
+import java.sql.Connection;
 
 public class Main {
 
     private static RentEquipmentPage rentPage;
     private static EditDeleteRecordsPage editDeletePage;
+    private static SearchPage SPage;
+    private static AddRecords addRecPage;
+    public static Connection conn;
 
     /*
      * Find if a given record exists
      */
-    private static void SearchRecord(Scanner scanner, EquipManager equipmentList) {
-        System.out.println("Enter serial number of record to search: ");
-        equipmentList.SearchEquipment(scanner.nextInt());
+    private static void SearchRecordPage(Scanner scanner, EquipManager equipmentList) {
+        SPage = new SearchPage();
     }
 
     /*
      * Add a new record to database
      */
     private static void AddRecord(Scanner scanner, EquipManager equipmentList) {
-        Equipment newEquip = EquipmentFactory.GenerateEquip(scanner);
-        equipmentList.AddEquipment(newEquip);
+        addRecPage = new AddRecords();
     }
 
     /*
@@ -56,6 +58,9 @@ public class Main {
         boolean exit = false;
         int option;
 
+        QueryConnection connectionManager = new QueryConnection();
+        conn = connectionManager.GetConnection();
+
         while (!exit) {
             DisplayMenuPrompt();
             option = scanner.nextInt();
@@ -86,6 +91,7 @@ public class Main {
                 case 10:
                     System.out.println("Exiting program...");
                     exit = true;
+                    connectionManager.closeConnection(exit);
                     break;
                 default:
                     System.out.println("Invalid option. Try again!");
