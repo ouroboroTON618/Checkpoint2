@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.*;
 
 public class QueryManager {
     // Every single query call to the database will be called here:
@@ -8,6 +9,56 @@ public class QueryManager {
     // methods follow the format of public static
     // GetTableFields(requiredParamters1,.....);
     private static PreparedStatement ps;
+
+    public static String updateFieldRecords(String fieldOption, String updateValue) {
+
+        String sql = "UPDATE EQUIPMENT SET ? = ?";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setString(1, fieldOption);
+            ps.setString(2, updateValue);
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static String addNewRecord(HashMap<String, String> inputs) {
+
+        String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no, Type, Model_no, Description, Condition, Length, Width, Height, Weight, Warrant_exp, Year, Rental_rate, Rental_status, Purchase_pr, Order_no, Est_arr, Arr, Due_date, Pickup, Addit_fees, Return_cond;) VALUES(?,...,?)";
+
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            int count = 1;
+            for (String x : inputs.values()) {
+                count += 1;
+                ps.setString(count, x);
+            }
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+    }
+
+    public static ResultPackage getSearchEquip(String name) {
+
+        String sql = "SELECT * FROM EQUIPMENT WHERE EQUIPMENT.Type = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setString(1, name);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static void updateRentEquipment(String type, String delivery, String returnDate, String pickup) {
+
+    }
 
     public static ResultPackage getRentingCheckouts(String member_ID) {
 
@@ -24,14 +75,22 @@ public class QueryManager {
     }
 
     public static ResultPackage getPopularItem() {
-        String sql = "SELECT Serial_no, Manufacturer, DATED IFF(second, Arr, IF (Pickup IS NULL, GETDATE(), Pickup))/3600.0 AS Rental_Hours FROM ITEM WHERE I.Arr IS NOT NULL) GROUP BY Serial_no, Manufacturer ORDER BY Total_Rental_Hours DESC)";
+        String sql = "SELECT Serial_no, Manufacturer, DATED IFF(second, Arr, IF (Pickup IS NULL, GETDATE(), Pickup))/3600.0 AS Rental_Hours "
+                + "FROM EQUIPMENT AS E "
+                + "WHERE E.Arr IS NOT NULL) "
+                + "GROUP BY Serial_no, Manufacturer "
+                + "ORDER BY Rental_Hours DESC)";
         return QueryPrepare.sqlQuery(Main.conn, sql);
     }
 
     public static ResultPackage getPopularManufacturer() {
 
-        String sql = "SELECT COUNT(DISTINCT Serial_no) AS Count_dist_item FROM ITEM GROUP BY Manufacturer) HAVING MAX(Count_dist_item)) ";
+        String sql = "SELECT COUNT(DISTINCT Serial_no) AS Count_dist_item "
+                + "FROM EQUIPMENT "
+                + "GROUP BY Manufacturer) "
+                + "HAVING MAX(Count_dist_item)) ";
         return QueryPrepare.sqlQuery(Main.conn, sql);
+
     }
 
     public static ResultPackage getPopularDrone() {
@@ -47,25 +106,21 @@ public class QueryManager {
 
     public static ResultPackage getItemsCheckedOut() {
 
-        String sql = "SELECT D.Drone_serial_no, D.Drone_type, SUM(D.Distance) AS D_dist " +
-                "FROM DELIVERY AS D " +
-                "JOIN DRONE AS DR " +
-                "ON D.Drone_serial_no = DR.Serial_no " +
-                "AND D.Drone_type = DR.Type_id " +
-                "GROUP BY D.Drone_serial_no, D.Drone_type; " +
-
-                "SELECT R.Drone_serial_no, R.Drone_type, SUM(R.Distance) AS R_dist " +
-                "FROM RETURN AS R " +
-                "JOIN DRONE AS DR " +
-                "ON R.Drone_serial_no = DR.Serial_no " +
-                "AND R.Drone_type = DR.Type_id " +
-                "GROUP BY R.Drone_serial_no, R.Drone_type; " +
-
-                "SELECT D.Drone_serial_no, D.Drone_type, (D_dist + R_dist) AS Total_miles " +
-                "FROM DELIVERY_ITEMS AS D " +
-                "NATURAL JOIN RETURN_ITEMS " +
-                "ORDER BY D.D_dist DESC;";
-
+        String sql = "SELECT M.First_name, M.Last_name, COUNT() AS Count "
+                + "FROM (EQUIPMENT AS E JOIN RENTAL AS R ON E.Rental_no = R.RENTAL) AS X "
+                + "JOIN MEMBER AS M ON X.Member_id = M.Member_id "
+                + "GROUP BY M.Member_id "
+                + "ORDER BY COUNT() DESC "
+                + "LIMIT 1;"
+                + "SELECT M.First_name, M.Last_name, M.Email "
+                + "FROM MEMBER AS M "
+                + "JOIN (SELECT M.Member_id, COUNT(*) AS Count "
+                + "FROM EQUIPMENT AS E "
+                + "JOIN RENTAL AS R ON E.Rental_no = R.RENTAL "
+                + "JOIN MEMBER AS M ON R.Member_id = M.Member_id "
+                + "GROUP BY M.Member_id) AS Rental_Counts ON M.Member_id = Rental_Counts.Member_id "
+                + "ORDER BY Rental_Counts.Count DESC "
+                + "LIMIT 1;";
         return QueryPrepare.sqlQuery(Main.conn, sql);
 
     }

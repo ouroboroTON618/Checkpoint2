@@ -44,6 +44,9 @@ public class RentEquipmentPage {
             case 'p':
                 PickupDate();
                 break;
+            case 's':
+                SubmitInfo();
+                break;
             default:
                 System.out.println("Invalid Input: Please Enter a valid input");
                 MenuSelect();
@@ -107,15 +110,20 @@ public class RentEquipmentPage {
     private void MenuItems() {
 
         System.out.println("---------------------------Equipment Rental-------------------------------");
-        System.out.println("--------------------------You have selected: " + rentalStatus.get("Name")
+        System.out.println("--------------------------You have selected (T): " + rentalStatus.get("Name")
                 + "------------------------");
 
-        System.out.println("--------------------------Delivery Date: " + rentalStatus.get("Delivery Date")
+        System.out.println("--------------------------Delivery Date (D): " + rentalStatus.get("Delivery Date")
                 + "------------------------");
-        System.out.println("--------------------------Pickup Date: " + rentalStatus.get("Pickup Date")
+        System.out.println("--------------------------Pickup Date (P): " + rentalStatus.get("Pickup Date")
                 + "------------------------");
-        System.out.println("--------------------------Return Date: " + rentalStatus.get("Return Date")
+        System.out.println("--------------------------Return Date (R): " + rentalStatus.get("Return Date")
                 + "------------------------");
+
+        if (!rentalStatus.containsValue("Incomplete")) {
+            System.out.println(
+                    "--------------------------Information Completed: Submit Information (s) ------------------------");
+        }
         System.out.println(
                 "-------------------------Please Select a Menu Option Or M to return to Main Page-------------------");
         MenuSelect();
@@ -168,6 +176,15 @@ public class RentEquipmentPage {
             rentalStatus.put("Pickup Date", date);
         }
         MenuItems();
+    }
+
+    private void SubmitInfo() {
+        // call query manager and pass it the information
+
+        // get the result string back.
+        // if the result indicates success:
+        // then tell the user item has been delievered.
+
     }
 
     private boolean CompletedDianostics(String option) {

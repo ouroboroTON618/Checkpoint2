@@ -1,20 +1,37 @@
 
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class EditDeleteRecordsPage {
     private String type;
     private Scanner scanner;
-    private EquipManager equipList;
+    private HashMap<Integer, String> optionMap;
 
     public EditDeleteRecordsPage(EquipManager equipmentList) {
 
-        equipList = equipmentList;
+        optionMap = new HashMap<>();
+        CreateMap();
+
         scanner = new Scanner(System.in);
         System.out.println("------------------------------------------------------------------");
         System.out.println("-----------------------Edit/Delete Records Page----------------------");
-        // MenuItems();
+        MenuItems();
 
+    }
+
+    private void CreateMap() {
+        // Provided list of strings
+        String[] strings = {
+                "Serial_no", "Manufacturer", "Rental_no", "Type", "Model_no",
+                "Description", "Condition", "Length", "Width", "Height", "Weight",
+                "Warrant_exp", "Year", "Rental_rate", "Rental_status", "Purchase_pr",
+                "Order_no", "Est_arr", "Arr", "Due_date", "Pickup", "Addit_fees",
+                "Return_cond"
+        };
+
+        // Populate the map with keys incrementing by 1 and strings as values
+        for (int i = 0; i < strings.length; i++) {
+            optionMap.put(i + 1, strings[i]);
+        }
     }
 
     private void MainOrChange() {
@@ -98,7 +115,7 @@ public class EditDeleteRecordsPage {
     }
 
     private void DeleteExistingRecord(String menuOption) {
-        equipList.DeleteEquipment(Integer.parseInt(menuOption));
+        // Implement Later
     }
 
     private void EditOption() {
@@ -152,13 +169,7 @@ public class EditDeleteRecordsPage {
         DisplayTable(menuOption, editableFields);
 
         System.out.println(
-                "------------------Editable (1)" + editableFields[0] + "--------------------------");
-        System.out.println(
-                "------------------Editable (2)" + editableFields[1] + "--------------------------");
-        System.out.println(
-                "------------------Editable (3)" + editableFields[2] + "--------------------------");
-        System.out.println(
-                "------------------Please Choose a Field to Edit: # --------------------------");
+                "------------------Please Enter the Exact Name of the Field to Edit: --------------------------");
         MainOrChange();
 
         String fieldOption = scanner.nextLine();
@@ -177,16 +188,17 @@ public class EditDeleteRecordsPage {
             EditExistingRecord(menuOption);
 
         } else {
-            String isSuccessMessage = UpdateData(updateValue);
+            String isSuccessMessage = UpdateData(updateValue, fieldOption);
             System.out.println("------------------" + isSuccessMessage + "----------------------------");
         }
     }
 
-    private String UpdateData(String updateValue) {
+    private String UpdateData(String updateValue, String fieldOption) {
         // Call the query manager to update it and pass it a specific value
         // have the query manager return a success message or a error message of what
         // went wrong.
-        return "Successful";
+        String result = QueryManager.updateFieldRecords(fieldOption, updateValue);
+        return result;
     }
 
     private String[] ParseEditableFields(String menuOption) {
