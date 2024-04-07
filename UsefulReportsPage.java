@@ -1,34 +1,28 @@
-
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class UsefulReportsPage {
 
-    private String type;
     private Scanner scanner;
-    private HashMap<String, String> rentalStatus;
 
     public UsefulReportsPage() {
         scanner = new Scanner(System.in);
 
-        System.out.println("------------------------------------------------------------------");
-        System.out.println("-----------------------Useful Reports Page----------------------");
+        System.out.println(LineGenerator.generateLine(""));
+        System.out.println(LineGenerator.generateLine("Useful Reports Page"));
         MenuItems();
     }
 
     private void MenuItems() {
 
-        System.out.println("---------------------------Useful Reports -------------------------------");
-        System.out.println("---------------------------Option A: Renting Checkouts-------------------------------");
-        System.out.println("---------------------------Option B: Popular Item-------------------------------");
-        System.out.println("---------------------------Option C: Popular Manufacturer-------------------------------");
-        System.out.println("---------------------------Option D: Popular Drone-------------------------------");
-        System.out.println("---------------------------Option E: Items Checked Out-------------------------------");
-        System.out.println(
-                "---------------------------Option F: Equipment by Type of equipment-------------------------------");
+        System.out.println(LineGenerator.generateLine("Useful Reports"));
+        System.out.println(LineGenerator.generateLine("Option (A): Renting Checkouts"));
+        System.out.println(LineGenerator.generateLine("Option (B): Popular Item"));
+        System.out.println(LineGenerator.generateLine("Option (C): Popular Manufacturer"));
+        System.out.println(LineGenerator.generateLine("Option (D): Popular Drone"));
+        System.out.println(LineGenerator.generateLine("Option (E): Items Checked Out"));
+        System.out.println(LineGenerator.generateLine("Option (F): Equipment by Type of equipment"));
+        System.out.println(LineGenerator.generateLine("Please Select a Menu Option Or (M) to return to Main Page"));
 
-        System.out.println(
-                "-------------------------Please Select a Menu Option Or M to return to Main Page-------------------");
         MenuSelect();
     }
 
@@ -37,7 +31,7 @@ public class UsefulReportsPage {
         char option = menuOption.toLowerCase().charAt(0);
         switch (option) {
             case 'm':
-                System.out.println("temporay place holder for switch to main page");
+                Main.DisplayMenuPrompt();
                 break;
             case 'a':
                 RentingCheckouts();
@@ -65,73 +59,98 @@ public class UsefulReportsPage {
     }
 
     private void RentingCheckouts() {
-        // CALL QUERY MANAGER
 
-        System.out.println("Enter the member ID: ");
+        String member_ID = MemberID();
 
-        // Assuming its valid
-        String member_ID = scanner.nextLine();
-
-        ResultPackage result = QueryManager.getRentingCheckouts(member_ID);
-        String[] header = result.getHeaderFields();
-        String[][] data = result.getTableData();
-
-        TableDisplayGenerator.GenerateTableWithData(header, data);
+        if (Main.databaseEnabled) {
+            ResultPackage result = QueryManager.getRentingCheckouts(Integer.parseInt(member_ID));
+            TableDisplayGenerator.GenerateTable(result);
+        } else {
+            System.out.println("Database Disabled: Renting Checkouts Query is success: " + member_ID);
+        }
     }
 
     private void PopularItem() {
 
-        // call table generator
-        ResultPackage result = QueryManager.getItemsCheckedOut();
-        String[] header = result.getHeaderFields();
-        String[][] data = result.getTableData();
-
-        TableDisplayGenerator.GenerateTableWithData(header, data);
+        if (Main.databaseEnabled) {
+            ResultPackage result = QueryManager.getItemsCheckedOut();
+            TableDisplayGenerator.GenerateTable(result);
+        } else {
+            System.out.println("Database Disabled: Popular Item Query Success");
+        }
     }
 
     private void PopularManufacturer() {
-        ResultPackage result = QueryManager.getPopularManufacturer();
-        // call table generator
-        String[] header = result.getHeaderFields();
-        String[][] data = result.getTableData();
 
-        TableDisplayGenerator.GenerateTableWithData(header, data);
+        if (Main.databaseEnabled) {
+            ResultPackage result = QueryManager.getPopularManufacturer();
+            TableDisplayGenerator.GenerateTable(result);
+        } else {
+            System.out.println("Database Disabled: Popular Manufacturer Query Success.");
+        }
     }
 
     private void PopularDrone() {
-        ResultPackage result = QueryManager.getPopularDrone();
-        // call table generator
-        String[] header = result.getHeaderFields();
-        String[][] data = result.getTableData();
 
-        TableDisplayGenerator.GenerateTableWithData(header, data);
+        if (Main.databaseEnabled) {
+            ResultPackage result = QueryManager.getPopularDrone();
+            TableDisplayGenerator.GenerateTable(result);
+        } else {
+            System.out.println("Database Disabled: Popular Drone Query Success");
+        }
     }
 
     private void ItemsCheckedOut() {
-
-        ResultPackage result = QueryManager.getItemsCheckedOut();
-        // call table generator
-        String[] header = result.getHeaderFields();
-        String[][] data = result.getTableData();
-
-        TableDisplayGenerator.GenerateTableWithData(header, data);
+        if (Main.databaseEnabled) {
+            ResultPackage result = QueryManager.getItemsCheckedOut();
+            TableDisplayGenerator.GenerateTable(result);
+        } else {
+            System.out.println("Database Disabled: Items Checkout Query Success");
+        }
     }
 
     private void EquipmentByTypeOfEquipment() {
-        System.out.println("Enter the Year: ");
-        String year = scanner.nextLine();
-        System.out.println("Enter the Type of Equipement: ");
-        // Assuming its valid
-        String type = scanner.nextLine();
 
-        int yearNum = Integer.parseInt(year);
+        String year = Year();
+        String type = EquipType();
+        if (Main.databaseEnabled) {
+            ResultPackage result = QueryManager.getEquipmentByTypeOfEquipment(Integer.parseInt(year), type);
+            // call table generator
+            TableDisplayGenerator.GenerateTable(result);
+        } else {
+            System.out.println("Database Disabled: Equipment Type Query Success: ( " + year + " : " + type + " )");
+        }
+    }
 
-        ResultPackage result = QueryManager.getEquipmentByTypeOfEquipment(yearNum, type);
-        // call table generator
-        String[] header = result.getHeaderFields();
-        String[][] data = result.getTableData();
+    private String Year() {
+        String year = "";
+        while (!VerifyInputs.verifyYear(year)) {
+            System.out.println(LineGenerator.generateLine("Enter the Year(YYYY)"));
+            System.out.print("Year: ");
+            year = scanner.nextLine();
+        }
+        return year;
 
-        TableDisplayGenerator.GenerateTableWithData(header, data);
+    }
+
+    private String EquipType() {
+        String type = "";
+        while (!VerifyInputs.VerifyEquipmentType(type)) {
+            System.out.println(LineGenerator.generateLine("Enter the Type of Equipment(Type)"));
+            System.out.print("Type: ");
+            type = scanner.nextLine();
+        }
+        return type;
+    }
+
+    private String MemberID() {
+        String memberID = "";
+        while (!VerifyInputs.VerifyMemberID(memberID)) {
+            System.out.println(LineGenerator.generateLine("Enter the member ID"));
+            System.out.println("Member ID: ");
+            memberID = scanner.nextLine();
+        }
+        return memberID;
     }
 
 }

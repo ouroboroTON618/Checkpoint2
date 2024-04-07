@@ -6,14 +6,15 @@ public class EditDeleteRecordsPage {
     private Scanner scanner;
     private HashMap<Integer, String> optionMap;
 
-    public EditDeleteRecordsPage(EquipManager equipmentList) {
+    public EditDeleteRecordsPage() {
 
         optionMap = new HashMap<>();
         CreateMap();
 
         scanner = new Scanner(System.in);
-        System.out.println("------------------------------------------------------------------");
-        System.out.println("-----------------------Edit/Delete Records Page----------------------");
+        System.out.println(LineGenerator.generateLine(""));
+        System.out.println(LineGenerator.generateLine("Edit/Delete Records Page"));
+
         MenuItems();
 
     }
@@ -34,32 +35,23 @@ public class EditDeleteRecordsPage {
         }
     }
 
-    private void MainOrChange() {
-        System.out.println(
-                "-------------------------Please Select (S) to return to Options Menu-------------------");
-        System.out.println(
-                "-------------------------Please Select a Menu Option Or M to return to Main Page-------------------");
-
-    }
-
     private void MenuItems() {
 
-        System.out.println("---------------------------Edit/Delete Records -------------------------------");
-        System.out.println("--------------------------Option(A): Edit Existing Record" + "------------------------");
-
-        System.out.println("--------------------------Option(B): Delete Existing Record " + "------------------------");
-
-        System.out.println(
-                "-------------------------Please Select a Menu Option Or M to return to Main Page-------------------");
+        System.out.println(LineGenerator.generateLine("Edit/Delete Records"));
+        System.out.println(LineGenerator.generateLine("Option(A): Edit Existing Record"));
+        System.out.println(LineGenerator.generateLine("Option(B): Delete Existing Record"));
+        System.out.println(LineGenerator.generateLine("Please Select a Menu Option Or M to return to Main Page"));
         MenuSelect();
+        return;
     }
 
     private void MenuSelect() {
+        System.out.print("Option: ");
         String menuOption = scanner.nextLine();
         char option = menuOption.toLowerCase().charAt(0);
         switch (option) {
             case 'm':
-                System.out.println("temporay place holder for switch to main page");
+                Main.DisplayMenuPrompt();
                 break;
             case 'a':
                 EditOption();
@@ -72,28 +64,27 @@ public class EditDeleteRecordsPage {
                 MenuSelect();
                 break;
         }
+        return;
     }
 
     private void DeleteOption() {
-        System.out.println("---------------------------Delete Records -------------------------------");
-        System.out.println("--------------------------(H): View Existing Records " + "------------------------");
+        System.out.println(LineGenerator.generateLine("Delete Records"));
+        System.out.println(LineGenerator.generateLine("(H): View Existing Records"));
+        System.out.println(LineGenerator.generateLine("Otherwise: Enter serial number of record to delete:"));
 
-        System.out.println("--------------------------Otherwise: Enter serial number of record to delete: "
-                + "------------------------");
-        MainOrChange();
+        LineGenerator.MainOrChange();
+        System.out.print("Option: ");
         String menuOption = scanner.nextLine();
         while (menuOption.toLowerCase().equals("h")) {
             // display the equipment list and its serial numbers.
-
-            System.out.println("--------------------------Otherwise: Enter serial number of record to delete: "
-                    + "------------------------");
-            MainOrChange();
+            System.out.println(LineGenerator.generateLine("Otherwise: Enter serial number of record to delete:"));
+            LineGenerator.MainOrChange();
+            System.out.print("Option: ");
             menuOption = scanner.nextLine();
-
         }
 
         DeleteOptionSelect(menuOption);
-
+        return;
     }
 
     private void DeleteOptionSelect(String menuOption) {
@@ -103,8 +94,7 @@ public class EditDeleteRecordsPage {
         if (true) {
             DeleteExistingRecord(menuOption);
         } else if (menuOption.toLowerCase().equals("m")) {
-
-            // return to main page
+            Main.DisplayMenuPrompt();
         } else if (menuOption.toLowerCase().equals("s")) {
             MenuItems();
         } else {
@@ -112,6 +102,8 @@ public class EditDeleteRecordsPage {
                     "This is not a Serial Number. Please try again or check the list of valid serial numbers.");
             DeleteOption();
         }
+        return;
+
     }
 
     private void DeleteExistingRecord(String menuOption) {
@@ -119,44 +111,41 @@ public class EditDeleteRecordsPage {
     }
 
     private void EditOption() {
-        System.out.println("---------------------------Edit Records -------------------------------");
-        System.out.println("--------------------------(H): View Existing Records " + "------------------------");
-
-        System.out.println("--------------------------Otherwise: Enter serial number of record to edit: "
-                + "------------------------");
-
-        MainOrChange();
+        System.out.println(LineGenerator.generateLine("Edit Record"));
+        System.out.println(LineGenerator.generateLine("(H): View Existing Records"));
+        LineGenerator.MainOrChange();
+        System.out.println(LineGenerator.generateLine("Otherwise: Enter serial number of record to edit"));
 
         String menuOption = scanner.nextLine();
         while (menuOption.toLowerCase().equals("h")) {
             // display the equipment list and its serial numbers.
-
-            System.out.println("--------------------------Otherwise: Enter serial number of record to edit: "
-                    + "------------------------");
-            MainOrChange();
-
+            System.out.println("Display Place holder table that shows equip list and its serial numbers");
+            LineGenerator.MainOrChange();
+            System.out.println(LineGenerator.generateLine("Otherwise: Enter serial number of record to edit"));
+            System.out.print("Option: ");
             menuOption = scanner.nextLine();
 
         }
         EditOptionSelect(menuOption);
+        return;
     }
 
     private void EditOptionSelect(String menuOption) {
         // if menu option is in the table of existing serial numbers, then run edit on
         // it
         // place holder code for now until we query the existing serial numbers
-        if (true) {
-            EditExistingRecord(menuOption);
-        } else if (menuOption.toLowerCase().equals("m")) {
-
-            // return to main page
+        if (menuOption.toLowerCase().equals("m")) {
+            Main.DisplayMenuPrompt();
         } else if (menuOption.toLowerCase().equals("s")) {
             MenuItems();
+        } else if (true) {
+            EditExistingRecord(menuOption);
         } else {
             System.out.println(
                     "This is not a Serial Number. Please try again or check the list of valid serial numbers.");
             EditOption();
         }
+        return;
     }
 
     private void EditExistingRecord(String menuOption) {
@@ -164,23 +153,21 @@ public class EditDeleteRecordsPage {
         // Get name of menu option, current placeholder is implemented
         String equipName = "Equipment Name Placeholder(SerialNumber)";
         String[] editableFields = ParseEditableFields(menuOption);
-        System.out.println(
-                "------------------Edit" + equipName + "--------------------------");
-        DisplayTable(menuOption, editableFields);
 
-        System.out.println(
-                "------------------Please Enter the Exact Name of the Field to Edit: --------------------------");
-        MainOrChange();
+        System.out.println(LineGenerator.generateLine("Edit" + equipName));
+        System.out.println(LineGenerator.generateLine("Please Enter the Exact Name of the Field to Edit"));
+
+        DisplayTable(menuOption, editableFields);
+        LineGenerator.MainOrChange();
 
         String fieldOption = scanner.nextLine();
         EditField(menuOption, fieldOption);
+        return;
     }
 
     private void EditField(String menuOption, String fieldOption) {
-        System.out.println(
-                "------------------To Cancel: (C)--------------------------");
-        System.out.println(
-                "------------------Change data to:--------------------------");
+        System.out.println(LineGenerator.generateLine("To Cancel: (C)"));
+        System.out.print("Change data to: ");
 
         String updateValue = scanner.nextLine();
 
@@ -189,16 +176,22 @@ public class EditDeleteRecordsPage {
 
         } else {
             String isSuccessMessage = UpdateData(updateValue, fieldOption);
-            System.out.println("------------------" + isSuccessMessage + "----------------------------");
+            System.out.println(LineGenerator.generateLine(isSuccessMessage));
         }
+        return;
     }
 
     private String UpdateData(String updateValue, String fieldOption) {
         // Call the query manager to update it and pass it a specific value
         // have the query manager return a success message or a error message of what
         // went wrong.
-        String result = QueryManager.updateFieldRecords(fieldOption, updateValue);
-        return result;
+        if (Main.databaseEnabled) {
+            String result = QueryManager.updateFieldRecords(fieldOption, updateValue);
+            return result;
+        } else {
+            return "Database Disabled: Dta Updated!";
+        }
+
     }
 
     private String[] ParseEditableFields(String menuOption) {
@@ -219,9 +212,9 @@ public class EditDeleteRecordsPage {
     }
 
     private void DisplayTable(String menuOption, String[] placeholder) {
-        System.out.println(
-                "------------------Table--------------------------");
+        System.out.println(LineGenerator.generateLine("Table"));
         String[][] tableData = GetSerialNumberSpecificTable(menuOption);
         TableDisplayGenerator.GenerateTableWithData(placeholder, tableData);
+        return;
     }
 }
