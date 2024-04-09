@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class VerifyInputs {
 
     public static boolean verifyDates(String date) {
@@ -40,8 +42,9 @@ public class VerifyInputs {
 
     public static boolean VerifyMemberID(String memberID) {
         boolean check1 = verifyMemberIDSizeNo(memberID);
+
         boolean check2 = false;
-        if (check1 && Main.databaseEnabled) {
+        if (check1) {
             ResultPackage result = QueryManager.getMember(Integer.parseInt(memberID));
             if (result != null) {
                 check2 = VerifyInputs.verifyTableDataSingle(result, memberID, true);
@@ -119,8 +122,8 @@ public class VerifyInputs {
     }
 
     public static boolean verifyTableDataSingle(ResultPackage result, String check, boolean exist) {
-        String[][] data = result.getTableData();
-        for (String[] row : data) {
+        List<List<String>> data = result.getTableData();
+        for (List<String> row : data) {
             for (String value : row) {
                 if (check.equals(value)) {
                     return true;

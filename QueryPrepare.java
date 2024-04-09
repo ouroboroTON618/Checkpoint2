@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class QueryPrepare {
 
@@ -33,7 +34,7 @@ public class QueryPrepare {
 
             String[] headerFields = QueryResultManager.getHeaderFields(rsmd, columnCount);
 
-            String[][] dataValues = QueryResultManager.GetColumnData(rs, columnCount);
+            List<List<String>> dataValues = QueryResultManager.GetColumnData(rs, columnCount);
 
             rs.close();
             return new ResultPackage(headerFields, dataValues);
@@ -59,13 +60,14 @@ public class QueryPrepare {
             int columnCount = rsmd.getColumnCount();
 
             String[] headerFields = QueryResultManager.getHeaderFields(rsmd, columnCount);
-            String[][] dataValues = QueryResultManager.GetColumnData(rs, columnCount);
+            List<List<String>> dataValues = QueryResultManager.GetColumnData(rs, columnCount);
 
             rs.close();
-            ps.close();
+
             return new ResultPackage(headerFields, dataValues);
 
         } catch (SQLException e) {
+            System.out.println("Error");
             System.out.println(e.getMessage());
             return null;
         }

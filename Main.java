@@ -12,6 +12,7 @@ public class Main {
     public static Connection conn;
     public static boolean databaseEnabled = false;
     private static Scanner scanner;
+    public static boolean debugMode = true;
 
     /*
      * Find if a given record exists
@@ -111,6 +112,10 @@ public class Main {
         scanner = new Scanner(System.in);
         boolean exit = false;
         int option;
+
+        connectionManager = new QueryConnection();
+        conn = connectionManager.GetConnection();
+        System.out.println("This is the connection: " + connectionManager.GetConnection());
 
         if (databaseEnabled) {
             connectionManager = new QueryConnection();

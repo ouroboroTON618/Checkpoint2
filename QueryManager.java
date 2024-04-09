@@ -65,13 +65,16 @@ public class QueryManager {
 
     public static ResultPackage getMember(int member_ID) {
 
-        // TODO: Change to member table
-        String sql = "SELECT * FROM EQUIPMENT WHERE EQUIPMENT.Type = ?;";
+        String sql = "SELECT * FROM MEMBER WHERE Member_id = ?;";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, member_ID);
-            return QueryPrepare.sqlQuery(Main.conn, ps);
+            ResultPackage result = QueryPrepare.sqlQuery(Main.conn, ps);
+            ps.close();
+
+            return result;
         } catch (SQLException e) {
+            System.out.println("Error");
             System.out.println(e.getMessage());
             return null;
         }
@@ -95,35 +98,41 @@ public class QueryManager {
         return QueryPrepare.sqlQuery(Main.conn, sql);
     }
 
-    public static String updateRentEquipment(String type, String delivery, String returnDate, String pickup,String purchase,String memberID, String rentalNo) {
-        String sql = "CREATE PROCEDURE RENTAL( 
-            IN user_member_id VARCHAR(),
-            IN user_item_manuf VARCHAR() 
-            IN user_drone_serial_no VARCHAR(), 
-            IN user_drone_type VARCHAR(), 
-            IN user_location VARCHAR(), 
-            IN user_item_serial_no VARCHAR(), 
-            IN user_rental_no VARCHAR(), 
-            ) 
-            BEGIN 
-            INSERT INTO RENTAL (Rental_no, Member_id, Date_time) 
-            VALUES (‘user_rental_no’, ‘user_member_id’, CURRENT_TIME);
-            UPDATE RENTAL 
-            SET Rental_status = ‘Returned’ 
-            WHERE Rental_no = ‘user_rental_no’; 
-            UPDATE DRONE 
-            SET Deliv_status = 'En-Route', Location = ‘user_location’ 
-            WHERE Serial_no = ‘user_drone_serial_no’; 
-            INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) 
-            VALUES (‘user_Drone_serial_no’, ‘user_Drone_type’, ‘user_Rental_no’, ‘user_Item_serial_no’, ‘user_Item_manuf’); 
-            UPDATE DRONE 
-            SET Deliv_status = 'En-Route', Location = ‘user_location’ 
-            WHERE Serial_no = ‘user_drone_serial_no’; 
-            INSERT INTO RETURN (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) 
-            VALUES (‘user_Drone_serial_no’, ‘user_Drone_type’, ‘user_Rental_no’, ‘user_Item_serial_no’, ‘user_Item_manuf’); ";
+    public static String updateRentEquipment(String type, String delivery, String returnDate, String pickup,
+            String purchase, String memberID, String rentalNo) {
+        String sql = "";
+        // String sql = "CREATE PROCEDURE RENTAL(
+        // IN user_member_id VARCHAR(),
+        // IN user_item_manuf VARCHAR()
+        // IN user_drone_serial_no VARCHAR(),
+        // IN user_drone_type VARCHAR(),
+        // IN user_location VARCHAR(),
+        // IN user_item_serial_no VARCHAR(),
+        // IN user_rental_no VARCHAR(),
+        // )
+        // BEGIN
+        // INSERT INTO RENTAL (Rental_no, Member_id, Date_time)
+        // VALUES (â€˜user_rental_noâ€™, â€˜user_member_idâ€™, CURRENT_TIME);
+        // UPDATE RENTAL
+        // SET Rental_status = â€˜Returnedâ€™
+        // WHERE Rental_no = â€˜user_rental_noâ€™;
+        // UPDATE DRONE
+        // SET Deliv_status = 'En-Route', Location = â€˜user_locationâ€™
+        // WHERE Serial_no = â€˜user_drone_serial_noâ€™;
+        // INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no,
+        // Item_manuf)
+        // VALUES (â€˜user_Drone_serial_noâ€™, â€˜user_Drone_typeâ€™,
+        // â€˜user_Rental_noâ€™, â€˜user_Item_serial_noâ€™, â€˜user_Item_manufâ€™);
+        // UPDATE DRONE
+        // SET Deliv_status = 'En-Route', Location = â€˜user_locationâ€™
+        // WHERE Serial_no = â€˜user_drone_serial_noâ€™;
+        // INSERT INTO RETURN (Drone_serial_no, Drone_type, Rental_no, Item_serial_no,
+        // Item_manuf)
+        // VALUES (â€˜user_Drone_serial_noâ€™, â€˜user_Drone_typeâ€™,
+        // â€˜user_Rental_noâ€™, â€˜user_Item_serial_noâ€™, â€˜user_Item_manufâ€™); ";
 
-            return QueryPrepare.updateQuery(Main.conn, sql);
-
+        // return QueryPrepare.updateQuery(Main.conn, sql);
+        return null;
     }
 
     public static ResultPackage getRentingCheckouts(int member_ID) {

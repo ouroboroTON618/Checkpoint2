@@ -200,7 +200,7 @@ public class EditDeleteRecordsPage {
         return placeholder;
     }
 
-    private String[][] GetSerialNumberSpecificTable(String menuOption) {
+    private List<List<String>> GetSerialNumberSpecificTable(String menuOption) {
 
         // this will be a call to a query manager and the return type of the query
         // manager will ber String[][]
@@ -208,12 +208,21 @@ public class EditDeleteRecordsPage {
                 { "data1", "data1", "data1" },
                 { "data2", "data2", "data2" },
                 { "data3", "data3", "data3" } };
-        return placeholder;
+
+        List<List<String>> placeholderList = new ArrayList<>();
+        for (String[] row : placeholder) {
+            List<String> rowList = new ArrayList<>();
+            for (String value : row) {
+                rowList.add(value);
+            }
+            placeholderList.add(rowList);
+        }
+        return placeholderList;
     }
 
     private void DisplayTable(String menuOption, String[] placeholder) {
         System.out.println(LineGenerator.generateLine("Table"));
-        String[][] tableData = GetSerialNumberSpecificTable(menuOption);
+        List<List<String>> tableData = GetSerialNumberSpecificTable(menuOption);
         TableDisplayGenerator.GenerateTableWithData(placeholder, tableData);
         return;
     }

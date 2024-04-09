@@ -27,6 +27,7 @@ public class UsefulReportsPage {
     }
 
     private void MenuSelect() {
+        System.out.print("Option: ");
         String menuOption = scanner.nextLine();
         char option = menuOption.toLowerCase().charAt(0);
         switch (option) {
@@ -64,7 +65,9 @@ public class UsefulReportsPage {
 
         if (Main.databaseEnabled) {
             ResultPackage result = QueryManager.getRentingCheckouts(Integer.parseInt(member_ID));
+
             TableDisplayGenerator.GenerateTable(result);
+
         } else {
             System.out.println("Database Disabled: Renting Checkouts Query is success: " + member_ID);
         }
