@@ -31,4 +31,15 @@ public class TableDisplayGenerator {
         return String.format("%-" + n + "s", s);
     }
 
+    public static void GenerateTable(ResultPackage result) {
+        if (result != null) {
+            String[] header = result.getHeaderFields();
+            String[][] data = result.getTableData();
+            TableDisplayGenerator.GenerateTableWithData(header, data);
+        } else {
+            System.out.println("Result is null");
+        }
+
+    }
+
 }

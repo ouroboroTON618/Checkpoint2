@@ -22,6 +22,7 @@ public class QueryManager {
             System.out.println(e.getMessage());
             return null;
         }
+
     }
 
     public static String addNewRecord(HashMap<String, String> inputs) {
@@ -43,7 +44,7 @@ public class QueryManager {
 
     }
 
-    public static ResultPackage getSearchEquip(String name) {
+    public static ResultPackage getEquipment(String name) {
 
         String sql = "SELECT * FROM EQUIPMENT WHERE EQUIPMENT.Type = ?;";
         try {
@@ -56,7 +57,45 @@ public class QueryManager {
         }
     }
 
-    public static void updateRentEquipment(String type, String delivery, String returnDate, String pickup) {
+    public static ResultPackage getEquipmentTypes() {
+
+        String sql = "SELECT Type FROM EQUIPMENT";
+        return QueryPrepare.sqlQuery(Main.conn, sql);
+    }
+
+    public static ResultPackage getMember(int member_ID) {
+
+        // TODO: Change to member table
+        String sql = "SELECT * FROM EQUIPMENT WHERE EQUIPMENT.Type = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, member_ID);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static ResultPackage getRecord(int serial_number) {
+        // TODO: Change to equipment
+        String sql = "SELECT * FROM EQUIPMENT WHERE EQUIPMENT.Type = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serial_number);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static ResultPackage getRentalNos() {
+        String sql = "SELECT Rental_no FROM RENTAL";
+        return QueryPrepare.sqlQuery(Main.conn, sql);
+    }
+
+    public static String updateRentEquipment(String type, String delivery, String returnDate, String pickup,String purchase,String memberID, String rentalNo) {
         String sql = "CREATE PROCEDURE RENTAL( 
             IN user_member_id VARCHAR(),
             IN user_item_manuf VARCHAR() 
@@ -83,17 +122,17 @@ public class QueryManager {
             INSERT INTO RETURN (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) 
             VALUES (‘user_Drone_serial_no’, ‘user_Drone_type’, ‘user_Rental_no’, ‘user_Item_serial_no’, ‘user_Item_manuf’); ";
 
-            return QueryPrepare.sqlQuery(Main.conn, sql);
+            return QueryPrepare.updateQuery(Main.conn, sql);
 
     }
 
-    public static ResultPackage getRentingCheckouts(String member_ID) {
+    public static ResultPackage getRentingCheckouts(int member_ID) {
 
         String sql = "SELECT Member_id, Count(Rental_no) AS Total_Rented_Items FROM MEMBER AS M JOIN RENTAL AS R ON M.Member_id = R.Member_id WHERE Member_id = ?";
 
         try {
             ps = Main.conn.prepareStatement(sql);
-            ps.setString(1, member_ID);
+            ps.setInt(1, member_ID);
             return QueryPrepare.sqlQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
