@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class QueryResultManager {
 
@@ -24,10 +27,10 @@ public class QueryResultManager {
         String[] result = null;
         try {
             result = new String[columnCount];
-            // prints out column headers......
             for (int i = 1; i <= columnCount; i++) {
                 String value = data.getColumnName(i);
                 result[i - 1] = value;
+
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -36,25 +39,26 @@ public class QueryResultManager {
         return result;
     }
 
-    public static String[][] GetColumnData(ResultSet rs, int columnCount) {
-        String[][] result = null;
+    public static List<List<String>> GetColumnData(ResultSet rs, int columnCount) {
+        List<List<String>> result = new ArrayList<>();
         try {
-            int rowTotal = 0;
+
             while (rs.next()) {
-                rowTotal++;
-            }
-            result = new String[rowTotal][columnCount];
-            rs.beforeFirst();
-            int row = 0;
-            while (rs.next()) {
+                List<String> rowData = new ArrayList<>();
                 for (int i = 1; i <= columnCount; i++) {
                     String columnValue = rs.getString(i);
-                    result[row][i - 1] = columnValue;
+                    String dataWithoutNewLine = columnValue.replaceAll("\\r?\\n", ", ");
+                    rowData.add(dataWithoutNewLine);
                 }
-                row++;
+                result.add(rowData);
+            }
+
+            if (Main.debugMode) {
+                System.out.println("Data parsing COMPLETED");
             }
 
         } catch (SQLException e) {
+            System.out.println("Error");
             System.out.println(e.getMessage());
         }
         return result;

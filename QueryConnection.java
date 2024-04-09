@@ -1,17 +1,19 @@
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class QueryConnection {
     // This class will set up the entire connection part of the database.
 
-    private static String DATABASE = "database_binary.db";
+    private static String DATABASE = "test.db";
 
-    public static Connection conn = null;
+    public static Connection conn;
 
-    public void QueryConnection() {
-
+    public QueryConnection() {
         conn = initializeDB(DATABASE);
 
+        System.out.println("Connection Established");
     }
 
     public Connection GetConnection() {
