@@ -10,7 +10,8 @@ enum INFO_LEN {
     DATE(9),
     SERIAL_NO(6),
     MODEL_NO(3),
-    RENTAL_NO(4);
+    RENTAL_NO(4),
+    ORDER_NO(5);
 
     private final int length;
 

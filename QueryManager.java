@@ -25,25 +25,6 @@ public class QueryManager {
 
     }
 
-    public static String addNewRecord(HashMap<String, String> inputs) {
-
-        String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no, Type, Model_no, Description, Condition, Length, Width, Height, Weight, Warrant_exp, Year, Rental_rate, Rental_status, Purchase_pr, Order_no, Est_arr, Arr, Due_date, Pickup, Addit_fees, Return_cond;) VALUES(?,...,?)";
-
-        try {
-            ps = Main.conn.prepareStatement(sql);
-            int count = 1;
-            for (String x : inputs.values()) {
-                count += 1;
-                ps.setString(count, x);
-            }
-            return QueryPrepare.updateQuery(Main.conn, ps);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-
-    }
-
     public static ResultPackage getEquipment(String name) {
 
         String sql = "SELECT * FROM EQUIPMENT WHERE Type = ?;";
@@ -419,6 +400,33 @@ public class QueryManager {
     public static ResultPackage getDroneID_Item_Rental(int serialItem, int rentalNo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getDroneID_Item_Rental'");
+    }
+
+    // ---------------Adding New
+    // Item--------------------------------------------------
+    /**
+     * Add a new entry into Equip_Item table
+     * 
+     * Look at Equipment Object for the paramters
+     */
+    public static String addNewEquipItem(EquipmentObject item) {
+
+        // String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no,
+        // Type, Model_no, Description, Condition, Length, Width, Height, Weight,
+        // Warrant_exp, Year, Rental_rate, Rental_status, Purchase_pr, Order_no,
+        // Est_arr, Arr, Due_date, Pickup, Addit_fees, Return_cond;) VALUES(?,...,?)";
+
+        // try {
+        // ps = Main.conn.prepareStatement(sql);
+        // int count = 1;
+
+        // return QueryPrepare.updateQuery(Main.conn, ps);
+        // } catch (SQLException e) {
+        // System.out.println(e.getMessage());
+        // return null;
+        // }
+        return null;
+
     }
 
 }

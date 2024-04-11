@@ -190,4 +190,8 @@ public class VerifyInputs {
         return false;
     }
 
+    public static boolean verifyRentalStatus(String rentalStatus) {
+        return rentalStatus.equals("Available") || rentalStatus.equals("Unavailable");
+    }
+
 }

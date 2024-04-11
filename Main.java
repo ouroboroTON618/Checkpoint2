@@ -8,7 +8,7 @@ public class Main {
     private static EditDeleteRecordsPage editDeletePage;
     private static UsefulReportsPage usefulPage;
     private static SearchPage SPage;
-    private static AddRecords addRecPage;
+    private static AddEquipmentItem addRecPage;
     private static ReturnRentalPage returnPage;
 
     private static ConfirmDelivered confirm;
@@ -32,7 +32,7 @@ public class Main {
      * Add a new record to database
      */
     private static void AddRecord(Scanner scanner) {
-        addRecPage = new AddRecords();
+        addRecPage = new AddEquipmentItem();
         return;
     }
 
