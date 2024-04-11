@@ -255,7 +255,7 @@ public class QueryManager {
     }
 
     /**
-     * Insert a new row into the delivery table. These are the 3 given values, you
+     * Insert a new row into the Return table. These are the 3 given values, you
      * can get what u need by doing smaller queries with the paramaters provided.
      * //You can get the user's member id for warehouse info at USER_INFO.MEMBER_ID.
      * Look at utilities file
@@ -265,7 +265,7 @@ public class QueryManager {
      * @param itemSerialNo
      * @return
      */
-    public static String addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
+    public static String addNewReturnRecord(int rentalNo, int droneNo, int itemSerialNo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
     }
@@ -338,6 +338,52 @@ public class QueryManager {
     public static ResultPackage getRentalOrder(String rentalNo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getRentalOrder'");
+    }
+
+    /**
+     * Insert a new row into the Delivery table. These are the 3 given values, you
+     * can get what u need by doing smaller queries with the paramaters provided.
+     * //You can get the user's member id for warehouse info at USER_INFO.MEMBER_ID.
+     * Look at utilities file
+     */
+    public static String addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
+    }
+
+    /**
+     * Get all the rows from delivery table that is of the rental No given
+     * 
+     * @param rentalNo
+     * @return
+     */
+
+    public static ResultPackage getDeliveryRecords(int rentalNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDeliveryRecords'");
+    }
+
+    /**
+     * Get all rows from the rental table that meets the rental no given
+     * 
+     * @param rentalNo
+     * @return
+     */
+    public static ResultPackage getReturnRecords(int rentalNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getReturnRecords'");
+    }
+
+    /**
+     * Update the equipment table conditon the serial number paramter.
+     * 
+     * @param int1
+     * @param conditon
+     * @return
+     */
+    public static String updateRentalInfo(int item_serialNo, String conditon) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateRentalInfo'");
     }
 
 }

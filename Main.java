@@ -9,15 +9,15 @@ public class Main {
     private static UsefulReportsPage usefulPage;
     private static SearchPage SPage;
     private static AddRecords addRecPage;
+    private static ReturnRentalPage returnPage;
     public static Connection conn;
     public static boolean databaseEnabled = false;
     private static Scanner scanner;
     public static boolean debugMode = true;
 
-
-/*
- * This is merely a git test
- */
+    /*
+     * This is merely a git test
+     */
     /*
      * Find if a given record exists
      */
@@ -53,16 +53,23 @@ public class Main {
         return;
     }
 
+    private static void Return_PickUp() {
+        returnPage = new ReturnRentalPage();
+        return;
+    }
+
     /*
      * Menu with all options for the user
      */
     public static void DisplayMenuPrompt() {
         System.out.println("Choose one of the following menu options:");
-        System.out.println("1. Add new records");
+        System.out.println("1. Add new equipment item");
         System.out.println("2. Edit/delete records");
         System.out.println("3. Search");
-        System.out.println("4. Rent/Return equipment");
+        System.out.println("4. Rent / Schedule Delivery Equipment");
         System.out.println("5. Useful Reports");
+        System.out.println("6. Return / Schedule Return Pickup Equipment");
+        System.out.println("7. Delivery Page");
         System.out.println("10. Exit");
         System.out.print("Option: ");
         MenuSelect();
@@ -89,6 +96,7 @@ public class Main {
                 break;
             case 6:
 
+                Return_PickUp();
                 break;
             case 7:
 

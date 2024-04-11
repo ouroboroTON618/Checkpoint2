@@ -61,7 +61,7 @@ public class ReturnRentalPage {
             String updateResult = QueryManager.updateScheduleRentalInfo(serialNo, pickUpdate, auditFee);
 
             // Do Drone scheulding
-            DroneAssign.ScheduleDrone(Integer.parseInt(serialNo), Integer.parseInt(curr_rentalNo));
+            DroneAssign.ScheduleDrone(Integer.parseInt(serialNo), Integer.parseInt(curr_rentalNo), false);
 
             if (LineGenerator.ConditionalCheck(STATEMENT.COMPLETED)) {
                 System.out.println("You have finished return form for item: " + serialNo);
@@ -87,6 +87,10 @@ public class ReturnRentalPage {
             String conditon = ReturnCond();
             // Insert values into return
 
+            String updateResult = QueryManager.updateRentalInfo(Integer.parseInt(serialNo), conditon);
+            System.out.println(
+                    LineGenerator.generateLine("Please go to schedule pickup to schedule a drone to pick up the item"));
+            MenuItems();
         }
     }
 
