@@ -445,4 +445,48 @@ public class QueryManager {
         throw new UnsupportedOperationException("Unimplemented method 'getModelNo'");
     }
 
+    /**
+     * Add a new record inside Equipment table
+     * 
+     * @param item
+     * @return
+     */
+    public static String addRentEquipment(EquipmentRentalObject item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addRentEquipment'");
+    }
+
+    /**
+     * Get all the serial numbers of avaliable items based on specific type
+     * 
+     * @param type
+     * @return
+     */
+    public static ResultPackage getSerialByType(String type) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSerialByType'");
+    }
+
+    /**
+     * Get the type of the item based in specific serial number
+     * 
+     * @param int1
+     * @return
+     */
+    public static ResultPackage getTypeBySerial(int int1) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getTypeBySerial'");
+    }
+
+    /**
+     * Get all items with the same rental No from Equipment
+     * 
+     * @param rentalNo
+     * @return
+     */
+    public static ResultPackage getBulkOrder(String rentalNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getBulkOrder'");
+    }
+
 }

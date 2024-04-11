@@ -4,6 +4,15 @@ enum Type {
     SERIAL_NUM,
 }
 
+enum GET_FIELD {
+    TYPE,
+    SERIAL_NO,
+    RENTAL_NO,
+    EST_ARR,
+    DUE_DATE,
+    CUSTOMER_COST
+}
+
 enum INFO_LEN {
     MEMBER_ID(4),
     YEAR(4),
