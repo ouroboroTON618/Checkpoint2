@@ -74,7 +74,7 @@ public class ReturnRentalPage {
 
                 // Display the table of hte item rental listing.
                 ResultPackage result = QueryManager.getRentalItemHistory(Integer.parseInt(serialNo));
-
+                TableDisplayGenerator.GenerateTable(result);
             }
         }
     }
