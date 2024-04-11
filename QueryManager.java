@@ -386,17 +386,37 @@ public class QueryManager {
         throw new UnsupportedOperationException("Unimplemented method 'updateRentalInfo'");
     }
 
+    /**
+     * Get all the serial Numbers in Equipment table. Only 1 column
+     * 
+     * @return
+     */
     public static ResultPackage getSerialNo() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getSerialNo'");
     }
 
-    public static String updateDeliveryDateDelivered(int int1, String date) {
+    /**
+     * Update Equipment with the Arr = date for item serial no = serialNo
+     * 
+     * @param int1
+     * @param date
+     * @return
+     */
+    public static String updateDeliveryDateDelivered(int serialNo, String date) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateDeliveryDateDelivered'");
     }
 
-    public static ResultPackage getDroneID_Item_Rental(int int1, int int2) {
+    /**
+     * Get the drone serialID in Delivery when item serial no = serial Item and
+     * rental number = rental NO
+     * 
+     * @param serialItem
+     * @param rentalNo
+     * @return
+     */
+    public static ResultPackage getDroneID_Item_Rental(int serialItem, int rentalNo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getDroneID_Item_Rental'");
     }
