@@ -85,43 +85,6 @@ public class QueryManager {
         return QueryPrepare.sqlQuery(Main.conn, sql);
     }
 
-    public static String updateRentEquipment(String type, String delivery, String returnDate, String pickup,
-            String purchase, String memberID, String rentalNo) {
-        String sql = "";
-        // String sql = "CREATE PROCEDURE RENTAL(
-        // IN user_member_id VARCHAR(),
-        // IN user_item_manuf VARCHAR()
-        // IN user_drone_serial_no VARCHAR(),
-        // IN user_drone_type VARCHAR(),
-        // IN user_location VARCHAR(),
-        // IN user_item_serial_no VARCHAR(),
-        // IN user_rental_no VARCHAR(),
-        // )
-        // BEGIN
-        // INSERT INTO RENTAL (Rental_no, Member_id, Date_time)
-        // VALUES (â€˜user_rental_noâ€™, â€˜user_member_idâ€™, CURRENT_TIME);
-        // UPDATE RENTAL
-        // SET Rental_status = â€˜Returnedâ€™
-        // WHERE Rental_no = â€˜user_rental_noâ€™;
-        // UPDATE DRONE
-        // SET Deliv_status = 'En-Route', Location = â€˜user_locationâ€™
-        // WHERE Serial_no = â€˜user_drone_serial_noâ€™;
-        // INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no,
-        // Item_manuf)
-        // VALUES (â€˜user_Drone_serial_noâ€™, â€˜user_Drone_typeâ€™,
-        // â€˜user_Rental_noâ€™, â€˜user_Item_serial_noâ€™, â€˜user_Item_manufâ€™);
-        // UPDATE DRONE
-        // SET Deliv_status = 'En-Route', Location = â€˜user_locationâ€™
-        // WHERE Serial_no = â€˜user_drone_serial_noâ€™;
-        // INSERT INTO RETURN (Drone_serial_no, Drone_type, Rental_no, Item_serial_no,
-        // Item_manuf)
-        // VALUES (â€˜user_Drone_serial_noâ€™, â€˜user_Drone_typeâ€™,
-        // â€˜user_Rental_noâ€™, â€˜user_Item_serial_noâ€™, â€˜user_Item_manufâ€™); ";
-
-        // return QueryPrepare.updateQuery(Main.conn, sql);
-        return null;
-    }
-
     public static ResultPackage getRentingCheckouts(int member_ID) {
 
         String sql = "SELECT Member_id, Count(Rental_no) AS Total_Rented_Items FROM MEMBER AS M JOIN RENTAL AS R ON M.Member_id = R.Member_id WHERE Member_id = ?";
