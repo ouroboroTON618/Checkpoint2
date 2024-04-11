@@ -10,6 +10,8 @@ public class Main {
     private static SearchPage SPage;
     private static AddRecords addRecPage;
     private static ReturnRentalPage returnPage;
+
+    private static ConfirmDelivered confirm;
     public static Connection conn;
     public static boolean databaseEnabled = false;
     private static Scanner scanner;
@@ -58,6 +60,11 @@ public class Main {
         return;
     }
 
+    private static void Confirm_Delivery() {
+        confirm = new ConfirmDelivered();
+        return;
+    }
+
     /*
      * Menu with all options for the user
      */
@@ -69,7 +76,7 @@ public class Main {
         System.out.println("4. Rent / Schedule Delivery Equipment");
         System.out.println("5. Useful Reports");
         System.out.println("6. Return / Schedule Return Pickup Equipment");
-        System.out.println("7. Delivery Page");
+        System.out.println("7. Confirm Delivery Page");
         System.out.println("10. Exit");
         System.out.print("Option: ");
         MenuSelect();
@@ -99,7 +106,7 @@ public class Main {
                 Return_PickUp();
                 break;
             case 7:
-
+                Confirm_Delivery();
                 break;
             case 10:
                 Exit();
@@ -120,7 +127,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        EquipManager equipmentList = new EquipManager();
+
         scanner = new Scanner(System.in);
         boolean exit = false;
         int option;

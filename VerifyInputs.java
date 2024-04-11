@@ -90,6 +90,19 @@ public class VerifyInputs {
         return verifyNoInput(SerialNo, INFO_LEN.SERIAL_NO.getLength(), false);
     }
 
+    public static boolean verifySerialNoExist(String serialNo) {
+        boolean check1 = verifySerialNo(serialNo);
+
+        boolean check2 = false;
+        if (check1) {
+            ResultPackage result = QueryManager.getSerialNo();
+            if (result != null) {
+                check2 = VerifyInputs.verifyTableDataSingle(result, serialNo, true);
+            }
+        }
+        return check1 && check2;
+    }
+
     public static boolean verifyCond(String cond) {
         if (verifyStringOnly(cond)) {
             switch (cond.toLowerCase()) {

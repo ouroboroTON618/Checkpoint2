@@ -386,4 +386,19 @@ public class QueryManager {
         throw new UnsupportedOperationException("Unimplemented method 'updateRentalInfo'");
     }
 
+    public static ResultPackage getSerialNo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSerialNo'");
+    }
+
+    public static String updateDeliveryDateDelivered(int int1, String date) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateDeliveryDateDelivered'");
+    }
+
+    public static ResultPackage getDroneID_Item_Rental(int int1, int int2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDroneID_Item_Rental'");
+    }
+
 }
