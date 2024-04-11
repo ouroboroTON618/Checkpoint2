@@ -197,7 +197,7 @@ public class QueryManager {
 
     public static ResultPackage getEquipmentByTypeOfEquipment(int year, String type) {    	
     	String sql = """
-                SELECT T.Description
+                SELECT T.Type, T.Description, E.Year
                 FROM EQUIPMENT AS E
                 JOIN EQP_TYPE AS T ON E.Manufacturer = T.Manufacturer AND E.Model_no = T.Model_no
                 WHERE E.Year < ? AND T.Type = ?;

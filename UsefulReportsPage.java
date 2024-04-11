@@ -143,6 +143,7 @@ public class UsefulReportsPage {
             System.out.println(LineGenerator.generateLine("Enter the Type of Equipment(Type)"));
             System.out.print("Type: ");
             type = scanner.nextLine();
+            type = type.substring(0, 1).toUpperCase() + type.substring(1).toLowerCase();
         }
         return type;
     }
