@@ -429,4 +429,14 @@ public class QueryManager {
 
     }
 
+    /**
+     * Get all the model Numbers from equp_type
+     * 
+     * @return
+     */
+    public static ResultPackage getModelNo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getModelNo'");
+    }
+
 }

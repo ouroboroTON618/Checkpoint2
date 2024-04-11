@@ -103,6 +103,17 @@ public class VerifyInputs {
         return check1 && check2;
     }
 
+    public static boolean verifySerialNoExistOnly(String serialNo) {
+
+        ResultPackage result = QueryManager.getSerialNo();
+        if (result != null) {
+            return VerifyInputs.verifyTableDataSingle(result, serialNo, true);
+        } else {
+            return false;
+        }
+
+    }
+
     public static boolean verifyCond(String cond) {
         if (verifyStringOnly(cond)) {
             switch (cond.toLowerCase()) {
@@ -192,6 +203,13 @@ public class VerifyInputs {
 
     public static boolean verifyRentalStatus(String rentalStatus) {
         return rentalStatus.equals("Available") || rentalStatus.equals("Unavailable");
+    }
+
+    public static boolean verifyModelExists(String modelNo) {
+
+        ResultPackage result = QueryManager.getModelNo();
+        return verifyTableDataSingle(result, modelNo, true);
+
     }
 
 }

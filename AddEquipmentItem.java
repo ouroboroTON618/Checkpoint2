@@ -298,7 +298,8 @@ public class AddEquipmentItem {
 
         if (confirm) {
             String modelNo = "";
-            while (!VerifyInputs.verifyNoInput(modelNo, INFO_LEN.MODEL_NO.getLength(), false)) {
+            while (!VerifyInputs.verifyNoInput(modelNo, INFO_LEN.MODEL_NO.getLength(), false)
+                    && VerifyInputs.verifyModelExists(modelNo)) {
                 System.out.println(LineGenerator.generateLine("Enter the Equipment's Model No"));
                 System.out.print("Model No: ");
                 modelNo = scanner.nextLine();
@@ -342,11 +343,11 @@ public class AddEquipmentItem {
             confirm = (input.toLowerCase().charAt(0) == 'y') ? true : false;
         }
 
+        // TODO:Might have to check the logic here
         if (confirm) {
             System.out.println("confirm is " + confirm);
             String serialNo = "";
-            while (!VerifyInputs.verifySerialNo(serialNo)) {
-                System.out.println("verify is " + false);
+            while (!VerifyInputs.verifySerialNo(serialNo) || VerifyInputs.verifySerialNoExistOnly(serialNo)) {
                 System.out.println(LineGenerator.generateLine("Enter the equipment's serial no"));
                 System.out.print("Serial No: ");
                 serialNo = scanner.nextLine();
