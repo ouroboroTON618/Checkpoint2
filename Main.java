@@ -10,7 +10,7 @@ public class Main {
     private static SearchPage SPage;
     private static AddRecords addRecPage;
     public static Connection conn;
-    public static boolean databaseEnabled = false;
+    public static boolean databaseEnabled = true;
     private static Scanner scanner;
     public static boolean debugMode = true;
 

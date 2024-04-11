@@ -16,4 +16,7 @@ public class ResultPackage {
     public String[] getHeaderFields() {
         return headerFields;
     }
+    public List<List<String>> getData() {
+        return tableData;
+    }
 }

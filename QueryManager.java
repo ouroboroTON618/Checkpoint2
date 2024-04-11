@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -58,8 +59,7 @@ public class QueryManager {
     }
 
     public static ResultPackage getEquipmentTypes() {
-
-        String sql = "SELECT Type FROM EQUIPMENT";
+        String sql = "SELECT Type FROM EQP_TYPE";
         return QueryPrepare.sqlQuery(Main.conn, sql);
     }
 
@@ -81,8 +81,7 @@ public class QueryManager {
     }
 
     public static ResultPackage getRecord(int serial_number) {
-        // TODO: Change to equipment
-        String sql = "SELECT * FROM EQUIPMENT WHERE EQUIPMENT.Type = ?;";
+        String sql = "SELECT * FROM EQP_TYPE WHERE EQP_TYPE.Type = ?;";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, serial_number);
@@ -135,9 +134,10 @@ public class QueryManager {
         return null;
     }
 
-    public static ResultPackage getRentingCheckouts(int member_ID) {
-
-        String sql = "SELECT Member_id, Count(Rental_no) AS Total_Rented_Items FROM MEMBER AS M JOIN RENTAL AS R ON M.Member_id = R.Member_id WHERE Member_id = ?";
+    public static ResultPackage getRentingCheckouts(int member_ID) {        
+        String sql = "SELECT M.Member_id, Count(R.Rental_no) AS Total_Rented_Items "
+        		+ "FROM MEMBER AS M NATURAL JOIN RENTAL AS R NATURAL JOIN EQUIPMENT "
+        		+ "WHERE M.Member_id = ?";
 
         try {
             ps = Main.conn.prepareStatement(sql);
@@ -147,66 +147,65 @@ public class QueryManager {
             System.out.println(e.getMessage());
             return null;
         }
+
     }
 
     public static ResultPackage getPopularItem() {
         String sql = "SELECT Serial_no, Manufacturer, DATED IFF(second, Arr, IF (Pickup IS NULL, GETDATE(), Pickup))/3600.0 AS Rental_Hours "
-                + "FROM EQUIPMENT AS E "
-                + "WHERE E.Arr IS NOT NULL) "
-                + "GROUP BY Serial_no, Manufacturer "
-                + "ORDER BY Rental_Hours DESC)";
+        		+ "FROM EQUIPMENT AS E WHERE E.Arr IS NOT NULL GROUP BY Serial_no, Manufacturer ORDER BY Rental_Hours DESC";
         return QueryPrepare.sqlQuery(Main.conn, sql);
     }
 
     public static ResultPackage getPopularManufacturer() {
-
-        String sql = "SELECT COUNT(DISTINCT Serial_no) AS Count_dist_item "
-                + "FROM EQUIPMENT "
-                + "GROUP BY Manufacturer) "
-                + "HAVING MAX(Count_dist_item)) ";
+    	   String sql = "SELECT Manufacturer, MAX(Count) AS Count\r\n"
+    	   		+ "    FROM (SELECT Manufacturer, COUNT(*) AS Count\r\n"
+    	   		+ "          FROM EQUIPMENT\r\n"
+    	   		+ "          GROUP BY Manufacturer);";
         return QueryPrepare.sqlQuery(Main.conn, sql);
 
     }
 
-    public static ResultPackage getPopularDrone() {
+    public static ResultPackage getPopularDrone() {    	
+    	String sql = "SELECT Drone_serial_no, Drone_type, Dist, IIF(Count IS NULL, 0, Count) AS Count\r\n"
+    			+ "FROM (SELECT Drone_serial_no, Drone_type, SUM(Distance) AS Dist\r\n"
+    			+ "    FROM (SELECT * FROM DELIVERY UNION SELECT * FROM RETURN AS R)\r\n"
+    			+ "    JOIN DRONE AS DR\r\n"
+    			+ "    ON Drone_serial_no = Serial_no\r\n"
+    			+ "    AND Drone_type = Type_id\r\n"
+    			+ "    GROUP BY Drone_serial_no, Drone_type) NATURAL LEFT JOIN\r\n"
+    			+ "    (SELECT Drone_serial_no, Drone_type, COUNT(*) AS Count\r\n"
+    			+ "    FROM DELIVERY JOIN DRONE \r\n"
+    			+ "    ON Drone_serial_no = Serial_no\r\n"
+    			+ "    AND Drone_type = Type_id\r\n"
+    			+ "    GROUP BY Drone_serial_no, Drone_type)\r\n"
+    			+ "ORDER BY Count DESC\r\n"
+    			+ "LIMIT 1;";
 
-        String sql = "SELECT Serial_no, Manufacturer, DATEDIFF(second, Arr, IF (Pickup IS NULL, GETDATE(), Pickup))/3600.0 AS Rental_Hours "
-                + "FROM ITEM "
-                + "WHERE I.Arr IS NOT NULL) "
-                + "GROUP BY Serial_no, Manufacturer "
-                + "ORDER BY Total_Rental_Hours DESC)";
         return QueryPrepare.sqlQuery(Main.conn, sql);
 
     }
 
     public static ResultPackage getItemsCheckedOut() {
+    	String sql = "SELECT Member_id, Max(No_items) AS Max_item_count\r\n"
+    			+ "FROM (SELECT Member_id, COUNT(*) AS No_items\r\n"
+    			+ "FROM EQUIPMENT NATURAL JOIN RENTAL\r\n"
+    			+ "GROUP BY Member_id)";
 
-        String sql = "SELECT M.First_name, M.Last_name, COUNT() AS Count "
-                + "FROM (EQUIPMENT AS E JOIN RENTAL AS R ON E.Rental_no = R.RENTAL) AS X "
-                + "JOIN MEMBER AS M ON X.Member_id = M.Member_id "
-                + "GROUP BY M.Member_id "
-                + "ORDER BY COUNT() DESC "
-                + "LIMIT 1;"
-                + "SELECT M.First_name, M.Last_name, M.Email "
-                + "FROM MEMBER AS M "
-                + "JOIN (SELECT M.Member_id, COUNT(*) AS Count "
-                + "FROM EQUIPMENT AS E "
-                + "JOIN RENTAL AS R ON E.Rental_no = R.RENTAL "
-                + "JOIN MEMBER AS M ON R.Member_id = M.Member_id "
-                + "GROUP BY M.Member_id) AS Rental_Counts ON M.Member_id = Rental_Counts.Member_id "
-                + "ORDER BY Rental_Counts.Count DESC "
-                + "LIMIT 1;";
         return QueryPrepare.sqlQuery(Main.conn, sql);
 
     }
 
-    public static ResultPackage getEquipmentByTypeOfEquipment(int year, String type) {
+    public static ResultPackage getEquipmentByTypeOfEquipment(int year) {    	
+    	String sql = "SELECT Type, MIN(Description) AS Description, MIN(Year) AS Year \r\n"
+    			+ "FROM EQP_TYPE \r\n"
+    			+ "    NATURAL JOIN EQP_ITEM \r\n"
+    			+ "    WHERE Year < ?\r\n"
+    			+ "    GROUP BY Type;";
 
-        String sql = "SELECT Description FROM EQUIPMENT WHERE Year < ? AND Type = ? ";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, year);
-            ps.setString(2, type);
+//            ps.setString(2, type);
             return QueryPrepare.sqlQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());

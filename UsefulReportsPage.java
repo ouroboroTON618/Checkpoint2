@@ -63,6 +63,7 @@ public class UsefulReportsPage {
 
         String member_ID = MemberID();
 
+
         if (Main.databaseEnabled) {
             ResultPackage result = QueryManager.getRentingCheckouts(Integer.parseInt(member_ID));
 
@@ -115,13 +116,13 @@ public class UsefulReportsPage {
     private void EquipmentByTypeOfEquipment() {
 
         String year = Year();
-        String type = EquipType();
+        //String type = EquipType();
         if (Main.databaseEnabled) {
-            ResultPackage result = QueryManager.getEquipmentByTypeOfEquipment(Integer.parseInt(year), type);
+            ResultPackage result = QueryManager.getEquipmentByTypeOfEquipment(Integer.parseInt(year));
             // call table generator
             TableDisplayGenerator.GenerateTable(result);
         } else {
-            System.out.println("Database Disabled: Equipment Type Query Success: ( " + year + " : " + type + " )");
+            System.out.println("Database Disabled: Equipment Type Query Success: ( " + year + " )");
         }
     }
 
@@ -142,6 +143,7 @@ public class UsefulReportsPage {
             System.out.println(LineGenerator.generateLine("Enter the Type of Equipment(Type)"));
             System.out.print("Type: ");
             type = scanner.nextLine();
+            type = type.substring(0, 1).toUpperCase() + type.substring(1).toLowerCase();
         }
         return type;
     }

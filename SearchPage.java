@@ -87,7 +87,7 @@ public class SearchPage {
             System.out.println("Member ID: ");
             memberID = scanner.nextLine();
         }
-        DisplayResults(Type.SERIAL_NUM, memberID);
+        DisplayResults(Type.MEMBER_ID, memberID);
     }
 
     private void SearchRecords() {

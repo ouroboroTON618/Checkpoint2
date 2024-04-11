@@ -123,6 +123,7 @@ public class VerifyInputs {
 
     public static boolean verifyTableDataSingle(ResultPackage result, String check, boolean exist) {
         List<List<String>> data = result.getTableData();
+
         for (List<String> row : data) {
             for (String value : row) {
                 if (check.equals(value)) {
