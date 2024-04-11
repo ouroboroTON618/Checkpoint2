@@ -116,13 +116,13 @@ public class UsefulReportsPage {
     private void EquipmentByTypeOfEquipment() {
 
         String year = Year();
-        String type = EquipType();
+        //String type = EquipType();
         if (Main.databaseEnabled) {
-            ResultPackage result = QueryManager.getEquipmentByTypeOfEquipment(Integer.parseInt(year), type);
+            ResultPackage result = QueryManager.getEquipmentByTypeOfEquipment(Integer.parseInt(year));
             // call table generator
             TableDisplayGenerator.GenerateTable(result);
         } else {
-            System.out.println("Database Disabled: Equipment Type Query Success: ( " + year + " : " + type + " )");
+            System.out.println("Database Disabled: Equipment Type Query Success: ( " + year + " )");
         }
     }
 

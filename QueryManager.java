@@ -195,18 +195,17 @@ public class QueryManager {
 
     }
 
-    public static ResultPackage getEquipmentByTypeOfEquipment(int year, String type) {    	
-    	String sql = """
-                SELECT T.Type, T.Description, E.Year
-                FROM EQUIPMENT AS E
-                JOIN EQP_TYPE AS T ON E.Manufacturer = T.Manufacturer AND E.Model_no = T.Model_no
-                WHERE E.Year < ? AND T.Type = ?;
-                """;
+    public static ResultPackage getEquipmentByTypeOfEquipment(int year) {    	
+    	String sql = "SELECT Type, MIN(Description) AS Description, MIN(Year) AS Year \r\n"
+    			+ "FROM EQP_TYPE \r\n"
+    			+ "    NATURAL JOIN EQP_ITEM \r\n"
+    			+ "    WHERE Year < ?\r\n"
+    			+ "    GROUP BY Type;";
 
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, year);
-            ps.setString(2, type);
+//            ps.setString(2, type);
             return QueryPrepare.sqlQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
