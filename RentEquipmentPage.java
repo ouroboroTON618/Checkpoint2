@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Scanner;
-import java.sql.Connection;
 import java.util.Random;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,27 +8,190 @@ public class RentEquipmentPage {
 
     private String type;
     private Scanner scanner;
-    private HashMap<String, String> rentalStatus;
+
+    private HashMap<String, EquipmentRentalObject> cart;
 
     public RentEquipmentPage() {
         scanner = new Scanner(System.in);
-        rentalStatus = new HashMap<String, String>() {
-            {
-                put("Type", "Incomplete");
-                put("Delivery Date", "Incomplete");
-                put("Return Date", "Incomplete");
-                put("Purchase Date", PurchasedDate());
-                put("Member_id", USER_INFO.MEMBER_ID.getValue().toString());
-                put("Pickup", USER_INFO.Name.getValue().toString());
-                put("Rental No", GenerateRentalNo());
-            }
-        };
+        cart = new HashMap<>();
 
         System.out.println(LineGenerator.generateLine(""));
         System.out.println(LineGenerator.generateLine("Equipment Rental Page"));
 
         MenuItems();
 
+    }
+
+    private void MenuItems() {
+        System.out.println(LineGenerator.generateLine("Equipment Rental"));
+        // System.out.println(LineGenerator.generateLine("You have selected (T): " +
+        // rentalStatus.get("Name")));
+        // System.out.println(LineGenerator.generateLine("Delivery Date (D): " +
+        // rentalStatus.get("Delivery Date")));
+        // System.out.println(LineGenerator.generateLine("Return Date (R): " +
+        // rentalStatus.get("Return Date")));
+
+        // //-------------
+
+        // //-----
+        System.out.println(LineGenerator.generateLine("Option (A): Select Item(s)"));
+        System.out.println(LineGenerator.generateLine("Option (B): Begin Checkout"));
+        System.out.println(LineGenerator.generateLine("Please Select a Menu Option Or M to return to Main Page"));
+
+        // if (!rentalStatus.containsValue("Incomplete")) {
+        // System.out.println(LineGenerator.generateLine("Information Completed: Submit
+        // Information (s)"));
+        // } else {
+        // System.out.println(LineGenerator.generateLine("Warning: All fields must be
+        // completed to submit"));
+        // }
+        MenuSelect();
+        return;
+    }
+
+    private void MenuSelect() {
+        String menuOption = scanner.nextLine();
+        char option = menuOption.toLowerCase().charAt(0);
+        switch (option) {
+            case 'm':
+                Main.DisplayMenuPrompt();
+                break;
+            case 'a':
+                AddItems();
+                break;
+            case 'b':
+                Checkout();
+                break;
+            default:
+                System.out.println("Invalid Input: Please Enter a valid input");
+                MenuSelect();
+                break;
+        }
+        return;
+    }
+
+    private void Checkout() {
+        for (HashMap.Entry<String, EquipmentRentalObject> entry : cart.entrySet()) {
+            String key = entry.getKey();
+            EquipmentRentalObject value = entry.getValue();
+            CheckoutSelectionTypes(value);
+
+        }
+
+    }
+
+    public void ItemSelectionTypes() {
+        System.out.println(LineGenerator.generateLine("Option (A): Rent By Type"));
+        System.out.println(LineGenerator.generateLine("Option (B): Rent By Item Serial No"));
+        System.out.println(LineGenerator.generateLine("Please Select a Menu Option Or M to return to Main Page"));
+
+    }
+
+    public void CheckoutSelectionTypes(EquipmentRentalObject item) {
+        System.out.println(LineGenerator.generateLine("You have selected: " +
+                item.getType() + " [ " + item.getSerialNo() + "]"));
+        System.out.println(LineGenerator.generateLine("Estimated Delivery Date (D): " +
+                item.getEstArr()));
+        System.out.println(LineGenerator.generateLine("Due Date (R): " +
+                item.getDueDate()));
+
+        System.out.println(LineGenerator.generateLine("Please Select a Menu Option Or M to return to Main Page"));
+
+        ItemInfoSelect(item);
+    }
+
+    private void ItemInfoSelect(EquipmentRentalObject item) {
+        String menuOption = scanner.nextLine();
+        char option = menuOption.toLowerCase().charAt(0);
+        switch (option) {
+            case 'm':
+                Main.DisplayMenuPrompt();
+                break;
+            case 'd':
+                DeliveryDate(item);
+                break;
+            case 'r':
+                ReturnDate(item);
+                break;
+            case 's':
+                SubmitInfo(item);
+                break;
+            default:
+                System.out.println("Invalid Input: Please Enter a valid input");
+                MenuSelect();
+                break;
+        }
+        return;
+    }
+
+    private void AddItems() {
+
+        boolean addMore = true;
+        while (addMore) {
+            ItemSelectionTypes();
+            RentEQuipSelect();
+            addMore = Continue();
+        }
+        MenuSelect();
+    }
+
+    private boolean Continue() {
+
+        System.out.println(LineGenerator.generateLine("Would You Like to Rent More equipment? (Y/N)"));
+        System.out.print("(y/n): ");
+        String choice = scanner.nextLine();
+        return VerifyInputs.verifyYNInput(choice);
+    }
+
+    private void RentEQuipSelect() {
+        String menuOption = scanner.nextLine();
+        char option = menuOption.toLowerCase().charAt(0);
+        switch (option) {
+            case 'm':
+                Main.DisplayMenuPrompt();
+                break;
+            case 'a':
+                RentalSelect();
+                break;
+            case 'b':
+                SerialNoSelect();
+                break;
+
+            default:
+                System.out.println("Invalid Input: Please Enter a valid input");
+                MenuSelect();
+                break;
+        }
+        return;
+    }
+
+    private void SerialNoSelect() {
+        if (!CompletedDianostics("Type")) {
+            boolean confirm = false;
+            String type = "";
+            String serial = "";
+            while (!confirm) {
+                serial = SerialNumber();
+                type = GetTypeBySerial(serial);
+                System.out.println(
+                        LineGenerator
+                                .generateLine("Selected Equipment is: " + type + " [" + serial
+                                        + "]. Confirm Selection? (Y/N)"));
+                String confirmation = scanner.nextLine();
+                confirm = (confirmation.toLowerCase().charAt(0) == 'y') ? true : false;
+            }
+            EquipmentRentalObject item = new EquipmentRentalObject();
+            item.setSerialNo(serial);
+            item.setType(type);
+            item.setRentalNo(GenerateRentalNo());
+        }
+    }
+
+    private String GetTypeBySerial(String serial) {
+
+        ResultPackage result = QueryManager.getTypeBySerial(Integer.parseInt(serial));
+
+        return LineGenerator.GetFirstDataVal(result);
     }
 
     private String PurchasedDate() {
@@ -50,57 +212,64 @@ public class RentEquipmentPage {
         return Integer.toString(randomSixDigitNumber);
     }
 
-    private void MenuSelect() {
-        String menuOption = scanner.nextLine();
-        char option = menuOption.toLowerCase().charAt(0);
-        switch (option) {
-            case 'm':
-                Main.DisplayMenuPrompt();
-                break;
-            case 't':
-                RentalSelect();
-                break;
-            case 'd':
-                DeliveryDate();
-                break;
-            case 'r':
-                ReturnDate();
-                break;
-            case 's':
-                SubmitInfo();
-                break;
-            default:
-                System.out.println("Invalid Input: Please Enter a valid input");
-                MenuSelect();
-                break;
-        }
-        return;
-    }
-
     private void RentalSelect() {
         if (!CompletedDianostics("Type")) {
             boolean confirm = false;
             String type = "";
+            String serial = "";
             while (!confirm) {
                 type = EquipType();
-                System.out.println(
-                        LineGenerator.generateLine("Selected Equipment is: " + type + " . Confirm Selection? (Y/N)"));
-                String confirmation = scanner.nextLine();
-                confirm = (confirmation.toLowerCase().charAt(0) == 'y') ? true : false;
+                if (DisplaySerialByType(type)) {
+                    serial = SerialNumber();
+                    System.out.println(
+                            LineGenerator
+                                    .generateLine("Selected Equipment is: " + type + " [" + serial
+                                            + "]. Confirm Selection? (Y/N)"));
+                    String confirmation = scanner.nextLine();
+                    confirm = (confirmation.toLowerCase().charAt(0) == 'y') ? true : false;
+                }
             }
-            rentalStatus.put("Type", type);
+            EquipmentRentalObject item = new EquipmentRentalObject();
+            item.setSerialNo(serial);
+            item.setType(type);
+            item.setRentalNo(GenerateRentalNo());
         }
-        MenuItems();
+
         return;
+    }
+
+    private boolean DisplaySerialByType(String type) {
+
+        // Gets list of all equipment serial numbers of that specific type and is of
+        // avaliable status
+        ResultPackage result = QueryManager.getSerialByType(type);
+        if (result != null) {
+            TableDisplayGenerator.GenerateTable(result);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    private String SerialNumber() {
+
+        String serialNo = "";
+        while (!VerifyInputs.verifySerialNoExist(serialNo)) {
+            System.out.println(LineGenerator.generateLine("Enter serial number of item: "));
+            System.out.print("Serial Number: ");
+            serialNo = scanner.nextLine();
+        }
+        return serialNo;
     }
 
     private String EquipType() {
         String type = "";
         while (!VerifyInputs.VerifyEquipmentType(type)) {
             System.out.println(LineGenerator.generateLine("Please Enter an Equipment Type to Rent"));
-            System.out.println(LineGenerator.generateLine("(H) View Available Equipment"));
+            DisplayTypes();
             System.out.print("Type: ");
-            type = InputParser(scanner.nextLine().toLowerCase());
+            type = scanner.nextLine();
         }
         return type;
 
@@ -114,7 +283,7 @@ public class RentEquipmentPage {
         return null;
     }
 
-    private String InputParser(String input) {
+    private void InputParser(String input) {
         if (input.equals('m')) {
             System.out.println("Do You Wish to Return to Main? Your data will be Lost(Y/N):");
             boolean confirm = (scanner.nextLine().toLowerCase().charAt(0) == 'y') ? true : false;
@@ -124,12 +293,6 @@ public class RentEquipmentPage {
             } else {
                 MenuItems();
             }
-        }
-        if (input.equals("h")) {
-            DisplayTypes();
-            return "";
-        } else {
-            return input;
         }
     }
 
@@ -144,42 +307,27 @@ public class RentEquipmentPage {
         }
     }
 
-    private void MenuItems() {
-        System.out.println(LineGenerator.generateLine("Equipment Rental"));
-        System.out.println(LineGenerator.generateLine("You have selected (T): " + rentalStatus.get("Name")));
-        System.out.println(LineGenerator.generateLine("Delivery Date (D): " + rentalStatus.get("Delivery Date")));
-        System.out.println(LineGenerator.generateLine("Return Date (R): " + rentalStatus.get("Return Date")));
-        System.out.println(LineGenerator.generateLine("Please Select a Menu Option Or M to return to Main Page"));
+    private void DeliveryDate(EquipmentRentalObject item) {
 
-        if (!rentalStatus.containsValue("Incomplete")) {
-            System.out.println(LineGenerator.generateLine("Information Completed: Submit Information (s)"));
-        } else {
-            System.out.println(LineGenerator.generateLine("Warning: All fields must be completed to submit"));
-        }
-        MenuSelect();
-        return;
-    }
-
-    private void DeliveryDate() {
-
-        if (!CompletedDianostics("Delivery Date")) {
+        if (!CompletedDianostics("Estimated Delivery Date")) {
             boolean confirm = false;
             String date = "";
             while (!confirm) {
-                date = Date("Please Enter an Available Date for Delivery(YYYY/MM/DD)");
+                date = Date("Please Enter an Available Date for Delivery(YYYY/MM/DD). This is an estimated date.");
                 System.out.println(
                         LineGenerator.generateLine("Selected Date is: " + date + " . Confirm Selection? (Y/N)"));
                 System.out.print("Option: ");
                 String confirmation = scanner.nextLine();
                 confirm = (confirmation.toLowerCase().charAt(0) == 'y') ? true : false;
             }
-            rentalStatus.put("Delivery Date", date);
+            item.setEstArr(date);
         }
-        MenuItems();
+        CheckoutSelectionTypes(item);
+
         return;
     }
 
-    private void ReturnDate() {
+    private void ReturnDate(EquipmentRentalObject item) {
         if (!CompletedDianostics("Return Date")) {
             boolean confirm = false;
             String date = "";
@@ -191,9 +339,10 @@ public class RentEquipmentPage {
                 String confirmation = scanner.nextLine();
                 confirm = (confirmation.toLowerCase().charAt(0) == 'y') ? true : false;
             }
-            rentalStatus.put("Return Date", date);
+            item.setDueDate(date);
         }
-        MenuItems();
+        CheckoutSelectionTypes(item);
+
         return;
     }
 
@@ -207,13 +356,12 @@ public class RentEquipmentPage {
         return date;
     }
 
-    private void SubmitInfo() {
+    /*
+     * This is placed on hoold
+     */
+    private void SubmitInfo(item) {
         if (Main.databaseEnabled) {
-            System.out.println(
-                    QueryManager.updateRentEquipment(rentalStatus.get("Type"), rentalStatus.get("Delivery Date"),
-                            rentalStatus.get("Return Date"), rentalStatus.get("Pickup"),
-                            rentalStatus.get("Purchase Date"),
-                            rentalStatus.get("Member_id"), rentalStatus.get("Rental No")));
+        String resultUpdate = QueryManager.updateRentEquipment(item);
         } else {
             System.out.println("Database Disabled: Information Submitted");
         }

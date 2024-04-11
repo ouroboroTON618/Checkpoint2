@@ -38,6 +38,12 @@ public class QueryManager {
         }
     }
 
+    /**
+     * Display the type, the model number, and equipment information and equipment
+     * serial number
+     * 
+     * @return
+     */
     public static ResultPackage getEquipmentTypes() {
 
         String sql = "SELECT Type FROM EQUIPMENT";
