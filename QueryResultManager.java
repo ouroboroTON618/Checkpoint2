@@ -47,8 +47,14 @@ public class QueryResultManager {
                 List<String> rowData = new ArrayList<>();
                 for (int i = 1; i <= columnCount; i++) {
                     String columnValue = rs.getString(i);
-                    String dataWithoutNewLine = columnValue.replaceAll("\\r?\\n", ", ");
-                    rowData.add(dataWithoutNewLine);
+
+                    if (columnValue != null) {
+                        String dataWithoutNewLine = columnValue.replaceAll("\\r?\\n", ", ");
+                        rowData.add(dataWithoutNewLine);
+                    } else {
+                        rowData.add(""); // or handle null values as needed
+                    }
+                    
                 }
                 result.add(rowData);
             }

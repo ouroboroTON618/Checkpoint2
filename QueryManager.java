@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -59,7 +60,8 @@ public class QueryManager {
 
     public static ResultPackage getEquipmentTypes() {
 
-        String sql = "SELECT Type FROM EQUIPMENT";
+//        String sql = "SELECT Type FROM EQUIPMENT";
+        String sql = "SELECT Type FROM EQP_TYPE";
         return QueryPrepare.sqlQuery(Main.conn, sql);
     }
 
@@ -149,6 +151,7 @@ public class QueryManager {
             System.out.println(e.getMessage());
             return null;
         }
+
     }
 
     public static ResultPackage getPopularItem() {
@@ -237,13 +240,13 @@ public class QueryManager {
     public static ResultPackage getEquipmentByTypeOfEquipment(int year, String type) {
 
 //        String sql = "SELECT Description FROM EQUIPMENT WHERE Year < ? AND Type = ? ";
+    	
     	String sql = """
                 SELECT T.Description
                 FROM EQUIPMENT AS E
                 JOIN EQP_TYPE AS T ON E.Manufacturer = T.Manufacturer AND E.Model_no = T.Model_no
                 WHERE E.Year < ? AND T.Type = ?;
                 """;
-
 
         try {
             ps = Main.conn.prepareStatement(sql);
