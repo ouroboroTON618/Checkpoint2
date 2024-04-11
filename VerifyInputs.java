@@ -40,6 +40,13 @@ public class VerifyInputs {
         return verifyNoInput(memberID, INFO_LEN.MEMBER_ID.getLength(), false);
     }
 
+    public static boolean verifyRentalSizeNo(String rentalNo) {
+
+        // member id is of length:
+
+        return verifyNoInput(rentalNo, INFO_LEN.RENTAL_NO.getLength(), false);
+    }
+
     public static boolean VerifyMemberID(String memberID) {
         boolean check1 = verifyMemberIDSizeNo(memberID);
 
@@ -48,6 +55,19 @@ public class VerifyInputs {
             ResultPackage result = QueryManager.getMember(Integer.parseInt(memberID));
             if (result != null) {
                 check2 = VerifyInputs.verifyTableDataSingle(result, memberID, true);
+            }
+        }
+        return check1 && check2;
+    }
+
+    public static boolean VerifyRentalNo(String rentalNo) {
+        boolean check1 = verifyMemberIDSizeNo(rentalNo);
+
+        boolean check2 = false;
+        if (check1) {
+            ResultPackage result = QueryManager.getRentalNos();
+            if (result != null) {
+                check2 = VerifyInputs.verifyTableDataSingle(result, rentalNo, true);
             }
         }
         return check1 && check2;
@@ -71,19 +91,23 @@ public class VerifyInputs {
     }
 
     public static boolean verifyCond(String cond) {
+        if (verifyStringOnly(cond)) {
+            switch (cond.toLowerCase()) {
+                case "good":
+                    return true;
 
-        switch (cond.toLowerCase()) {
-            case "good":
-                return true;
+                case "fair":
+                    return true;
 
-            case "fair":
-                return true;
-
-            case "poor":
-                return true;
-            default:
-                System.out.println("Input needs to be good, fair or poor");
-                return false;
+                case "poor":
+                    return true;
+                default:
+                    System.out.println("Input needs to be good, fair or poor");
+                    return false;
+            }
+        } else {
+            System.out.println("Please only enter A-Z characters.");
+            return false;
         }
     }
 
@@ -106,6 +130,14 @@ public class VerifyInputs {
         return check;
     }
 
+    public static boolean verifyYNInput(String line) {
+        if (line.toLowerCase().charAt(0) == 'y') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static boolean verifyStringOnly(String line) {
 
         if (line.length() > 0) {
@@ -119,6 +151,15 @@ public class VerifyInputs {
             return false;
         }
     }
+
+    /**
+     * 
+     * @param result
+     * @param check
+     * @param exist
+     *               check to see if the value exists inside the table
+     * @return
+     */
 
     public static boolean verifyTableDataSingle(ResultPackage result, String check, boolean exist) {
         List<List<String>> data = result.getTableData();

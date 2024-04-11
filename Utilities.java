@@ -9,7 +9,8 @@ enum INFO_LEN {
     YEAR(4),
     DATE(9),
     SERIAL_NO(6),
-    MODEL_NO(3);
+    MODEL_NO(3),
+    RENTAL_NO(4);
 
     private final int length;
 
@@ -20,6 +21,22 @@ enum INFO_LEN {
     public int getLength() {
         return length;
     }
+}
+
+enum STATEMENT {
+    COMPLETED("Are you done with this page? "),
+    CONTINUE("Do You Wish to Add More?");
+
+    private final String value;
+
+    STATEMENT(String name) {
+        this.value = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
 }
 
 enum USER_INFO {

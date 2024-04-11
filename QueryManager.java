@@ -25,7 +25,6 @@ public class QueryManager {
 
     }
 
-    
     public static String addNewRecord(HashMap<String, String> inputs) {
 
         String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no, Type, Model_no, Description, Condition, Length, Width, Height, Weight, Warrant_exp, Year, Rental_rate, Rental_status, Purchase_pr, Order_no, Est_arr, Arr, Due_date, Pickup, Addit_fees, Return_cond;) VALUES(?,...,?)";
@@ -45,7 +44,6 @@ public class QueryManager {
 
     }
 
-    
     public static ResultPackage getEquipment(String name) {
 
         String sql = "SELECT * FROM EQUIPMENT WHERE Type = ?;";
@@ -214,6 +212,132 @@ public class QueryManager {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    // ------------------------Shira start here:--------------------------------
+    /**
+     * Get the item weight for that specific item serial number
+     * 
+     * @param serialno
+     * @return
+     */
+    public static String getItemWeight(int serialno) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemWeight'");
+    }
+
+    /**
+     * Need the drone serial numbers and their model id numbers and all of their
+     * model id information of drones that are can carry the item weight, is located
+     * at hte same warehouse and can travel to the user. The drone's Inactive and
+     * delivery status must be avaliable
+     * May not need the dist attrivute. You can change all values into int's
+     * 
+     * @param itemWeight
+     * @param warehouse
+     * @param dist
+     * @return
+     */
+    public static ResultPackage getRequiredDrone(String itemWeight, String warehouse, String dist) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRequiredDrone'");
+    }
+
+    /**
+     * Get the warehouse of the member based on the given member ID
+     * 
+     * @param memberId
+     * @return
+     */
+    public static String getWarehouse(USER_INFO memberId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getWarehouse'");
+    }
+
+    /**
+     * Insert a new row into the delivery table. These are the 3 given values, you
+     * can get what u need by doing smaller queries with the paramaters provided.
+     * //You can get the user's member id for warehouse info at USER_INFO.MEMBER_ID.
+     * Look at utilities file
+     * 
+     * @param rentalNo
+     * @param droneNo
+     * @param itemSerialNo
+     * @return
+     */
+    public static String addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
+    }
+
+    /**
+     * Update drone delivery Inactive status inactive and delivery status to in
+     * transt. Make sure these are actually ment for item delivery w kjell/chat i
+     * already pinged him. If it isn't for delivery, then ignore
+     * 
+     * @param droneNo
+     * @return
+     */
+    public static ResultPackage updateDroneDelivery(int droneNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateDroneDelivery'");
+    }
+
+    /**
+     * Update drone delivery Inactive status inactive and delivery status to in
+     * transt. Make sure these are actually ment for item delivery w kjell/chat i
+     * already pinged him. If it isn't for delivery, then ignore
+     */
+    public static ResultPackage updateDroneDeliveryStatus(int droneSerial) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateDroneDeliveryStatus'");
+    }
+
+    /**
+     * gET the due date of the item by serial num
+     * 
+     * @param serialNum
+     * @return
+     */
+    public static ResultPackage getDueDate(int serialNum) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDueDate'");
+    }
+
+    /**
+     * Update these paramaters in Equipment table for the Serial No
+     * 
+     * @param serialNo
+     * @param pickUpdate
+     * @param auditFee
+     * @return
+     */
+    public static String updateScheduleRentalInfo(String serialNo, String pickUpdate, int auditFee) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateScheduleRentalInfo'");
+    }
+
+    /**
+     * Get all relevant info to display the rental info of item serial no in
+     * equipment table
+     * 
+     * @param int1
+     * @return
+     */
+    public static ResultPackage getRentalItemHistory(int serial) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRentalItemHistory'");
+    }
+
+    /**
+     * Select all the serial numbers for that specific rental no.
+     * 
+     * @param rentalNo
+     * @return
+     */
+    public static ResultPackage getRentalOrder(String rentalNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRentalOrder'");
     }
 
 }
