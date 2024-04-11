@@ -63,6 +63,7 @@ public class UsefulReportsPage {
 
         String member_ID = MemberID();
 
+
         if (Main.databaseEnabled) {
             ResultPackage result = QueryManager.getRentingCheckouts(Integer.parseInt(member_ID));
 
