@@ -25,6 +25,7 @@ public class QueryManager {
 
     }
 
+    
     public static String addNewRecord(HashMap<String, String> inputs) {
 
         String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no, Type, Model_no, Description, Condition, Length, Width, Height, Weight, Warrant_exp, Year, Rental_rate, Rental_status, Purchase_pr, Order_no, Est_arr, Arr, Due_date, Pickup, Addit_fees, Return_cond;) VALUES(?,...,?)";
@@ -44,9 +45,10 @@ public class QueryManager {
 
     }
 
+    
     public static ResultPackage getEquipment(String name) {
 
-        String sql = "SELECT * FROM EQUIPMENT WHERE EQUIPMENT.Type = ?;";
+        String sql = "SELECT * FROM EQUIPMENT WHERE Type = ?;";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setString(1, name);

@@ -67,7 +67,6 @@ public class VerifyInputs {
     }
 
     public static boolean verifySerialNo(String SerialNo) {
-
         return verifyNoInput(SerialNo, INFO_LEN.SERIAL_NO.getLength(), false);
     }
 
