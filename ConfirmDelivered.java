@@ -64,7 +64,8 @@ public class ConfirmDelivered {
     }
 
     private void UpdateDatabase(String serialNo, String date) {
-        String result = QueryManager.updateDeliveryDateDelivered(Integer.parseInt(serialNo),Integer.parseInt(curr_rentalNo), date);
+        String result = QueryManager.updateDeliveryDateDelivered(Integer.parseInt(serialNo),
+                Integer.parseInt(curr_rentalNo), date);
         ResultPackage droneIDResult = QueryManager.getDroneID_Item_Rental(Integer.parseInt(serialNo),
                 Integer.parseInt(curr_rentalNo));
         String droneSerial = LineGenerator.GetFirstDataVal(droneIDResult);
