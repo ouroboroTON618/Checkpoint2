@@ -211,7 +211,6 @@ public class RentEquipmentPage {
             case 'b':
                 SerialNoSelect();
                 break;
-
             default:
                 System.out.println("Invalid Input: Please Enter a valid input");
                 MenuSelect();
@@ -238,6 +237,7 @@ public class RentEquipmentPage {
         EquipmentRentalObject item = new EquipmentRentalObject();
         item.setSerialNo(serial);
         item.setType(type);
+       
         item.setRentalNo(GenerateRentalNo());
         cart.put(serial,item);
     }
@@ -257,11 +257,11 @@ public class RentEquipmentPage {
 
     private String GenerateRentalNo() {
         Random rand = new Random();
-        int randomSixDigitNumber = rand.nextInt(900000) + 100000;
+        int randomSixDigitNumber = rand.nextInt(9000) + 1000;
         if (Main.databaseEnabled) {
             ResultPackage result = QueryManager.getRentalNos();
             while (VerifyInputs.verifyTableDataSingle(result, Integer.toString(randomSixDigitNumber), false)) {
-                randomSixDigitNumber = rand.nextInt(900000) + 100000;
+                randomSixDigitNumber = rand.nextInt(9000) + 1000;
             }
         }
         return Integer.toString(randomSixDigitNumber);
@@ -377,7 +377,6 @@ public class RentEquipmentPage {
             item.setEstArr(date);
         }
         CheckoutSelectionTypes(item);
-
         return;
     }
 
@@ -417,7 +416,7 @@ public class RentEquipmentPage {
 
         if (Main.databaseEnabled) {
         	
-        	System.out.println("We are about to add");
+        	System.out.println("Adding Renting Info...");
             String addResult = QueryManager.addRentEquipment(item);
             System.out.println(addResult);
         } else {
@@ -426,24 +425,23 @@ public class RentEquipmentPage {
     }
 
     private void beginSumitProcess() {
-
-    	System.out.println("We are in begin sub");
+    	System.out.println("Submitting Info...");
         String rentalNo = "0";
         for (HashMap.Entry<String, EquipmentRentalObject> entry : cart.entrySet()) {
             String key = entry.getKey();
             EquipmentRentalObject value = entry.getValue();
             
-            System.out.println("We are in for loop");
+            
             SubmitInfo(value);
             rentalNo = value.getRentalNo();
-            DroneAssign.ScheduleDrone(Integer.parseInt(key), Integer.parseInt(value.getRentalNo()), true);
+            DroneAssign.ScheduleDrone(Integer.parseInt(key), Integer.parseInt(rentalNo), true);
         }
 
         System.out.println(LineGenerator.generateLine("Everything has been successfully submitted!"));
         System.out.println(LineGenerator.generateLine("Here is your order information:"));
 
         ResultPackage result = QueryManager.getBulkOrder(rentalNo);
-        TableDisplayGenerator.GenerateTable(result);
+        TableDisplayGenerator.GenerateTable(result);    
     }
 
     private boolean CompletedDianostics(EquipmentRentalObject item, GET_FIELD type) {

@@ -10,7 +10,7 @@ public class DroneAssign {
         // Find drone models id's and their model id info of avaliable drones that meet
         // this info
     	
-    	System.out.println("We are in find drone");
+    
         ResultPackage result = QueryManager.getRequiredDrone();
         
         TableDisplayGenerator.GenerateTable(result);
@@ -24,31 +24,32 @@ public class DroneAssign {
 
         String result = "";
         if (delivery) {
+        	System.out.println();
+        	System.out.println("Assigning Drone....");
+        	System.out.println();
             String resultL = QueryManager.addNewDeliveryRecord(rentalNo, droneNo, itemSerialNo);
+            System.out.println(result);
+            
             ResultPackage dataResult = QueryManager.getDeliveryRecords(rentalNo);
 
-            System.out.println(LineGenerator.generateLine("Drone has been assigned"));
-            TableDisplayGenerator.GenerateTable(dataResult);
+            if(!dataResult.getData().isEmpty()) {
+                System.out.println(LineGenerator.generateLine("Drone has been assigned"));
+                System.out.println();
+            	TableDisplayGenerator.GenerateTable(dataResult);
+            }
 
         } else {
-
-            ResultPackage result1 = QueryManager.getDroneType(droneNo);
-            String type = LineGenerator.GetFirstDataVal(result1);
-
-            ResultPackage result2 = QueryManager.getManufact(itemSerialNo);
-            String manu = LineGenerator.GetFirstDataVal(result2);
-
-            result = QueryManager.addNewReturnRecord(rentalNo, type, droneNo, itemSerialNo, manu);
-            // int Drone_serial_no, String Drone_type, int Rental_no,
-            // int Item_serial_no, String Item_manuf
+        	result = QueryManager.addNewReturnRecord(droneNo, rentalNo, itemSerialNo);
 
             ResultPackage dataResult = QueryManager.getReturnRecords(rentalNo);
+            System.out.println();
             System.out.println(
                     LineGenerator.generateLine(
                             "Your part of the return process has been completed. Please wait for drone to complete the return."));
 
             System.out.println(LineGenerator.generateLine("Returning Items:"));
             TableDisplayGenerator.GenerateTable(dataResult);
+            
 
         }
 
@@ -57,10 +58,13 @@ public class DroneAssign {
 
     public static void BeginDelivery(int droneNo) {
 
-        System.out.println(LineGenerator.generateLine("Drone " + droneNo + " will on it's way!"));
+        System.out.println(LineGenerator.generateLine("Drone " + droneNo + " will be on it's way!"));
         String resultS = QueryManager.updateDroneDelivery(droneNo);
         ResultPackage result = QueryManager.getDeliveryRecords(droneNo);
-        TableDisplayGenerator.GenerateTable(result);
+        
+        if(!result.getData().isEmpty()) {
+	        TableDisplayGenerator.GenerateTable(result);
+	    }
     }
 
     private static String droneID() {
@@ -73,14 +77,13 @@ public class DroneAssign {
             droneID = scan.nextLine();
         }
         
-        System.out.println("This is drone ID" );
         return droneID;
     }
 
     public static void ScheduleDrone(int item_serial_number, int rentalNo, boolean delivery) {
     	String droneId = FindDrone(item_serial_number);
     	
-    	System.out.println("This is drone ID");
+    	
         int droneSerial = Integer.parseInt(droneId);
         AssignDrone(droneSerial, rentalNo, item_serial_number, delivery);
         BeginDelivery(droneSerial);

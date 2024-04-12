@@ -68,6 +68,7 @@ public class ConfirmDelivered {
                 Integer.parseInt(curr_rentalNo), date);
         ResultPackage droneIDResult = QueryManager.getDroneID_Item_Rental(Integer.parseInt(serialNo),
                 Integer.parseInt(curr_rentalNo));
+        
         String droneSerial = LineGenerator.GetFirstDataVal(droneIDResult);
         DroneAssign.DroneFinished(Integer.parseInt(droneSerial));
         System.out.println(LineGenerator

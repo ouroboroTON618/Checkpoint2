@@ -57,8 +57,9 @@ public class TableDisplayGenerator {
         if (result != null) {
             String[] header = result.getHeaderFields();
             List<List<String>> data = result.getTableData();
+            System.out.println();
             GenerateTableWithData(header, data);
-
+            System.out.println();
         } else {
             System.out.println("Result is null");
         }

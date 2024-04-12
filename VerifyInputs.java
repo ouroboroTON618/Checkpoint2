@@ -139,7 +139,7 @@ public class VerifyInputs {
     public static boolean verifyNoInput(String input, int length, boolean lenPass) {
         boolean check = true;
 
-        if(input.length() == 0) {
+        if(input.length() != 0) {
 	        if (input.length() == length || lenPass) {
 	            for (int i = 0; i < input.length(); i++) {
 	            	char ch = input.charAt(i);
@@ -154,6 +154,8 @@ public class VerifyInputs {
 	            }
 	            check = false;
 	        }
+        }else {
+        	return false;
         }
         return check;
     }
@@ -191,7 +193,6 @@ public class VerifyInputs {
 
     public static boolean verifyTableDataSingle(ResultPackage result, String check, boolean exist) {
         List<List<String>> data = result.getTableData();
-
         for (List<String> row : data) {
             for (String value : row) {
                 if (check.equals(value)) {

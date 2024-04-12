@@ -94,7 +94,7 @@ public class AddEquipmentItem {
 
         System.out.println(LineGenerator.generateLine("Option (H): Rental_rate  : " + equipmentRecord.getRentalRate()));
         System.out.println(
-                LineGenerator.generateLine("Option (H): Rental_status  : " + equipmentRecord.getRentalStatus()));
+                LineGenerator.generateLine("Option (I): Rental_status  : " + equipmentRecord.getRentalStatus()));
 
         System.out.println(LineGenerator.generateLine("Option (Y): EXIT FIELD SELECTION TO SUBMIT"));
         System.out.println(LineGenerator.generateLine("Option (Z): RETURN TO MAIN PAGE"));
@@ -109,7 +109,6 @@ public class AddEquipmentItem {
         char option = menuOption.toLowerCase().charAt(0);
         switch (option) {
             case 'a':
-                System.out.println("This is going into serial no");
                 SerialNo();
                 break;
             case 'b':
@@ -130,7 +129,6 @@ public class AddEquipmentItem {
             case 'g':
                 Year();
                 break;
-
             case 'h':
                 RentalRate();
                 break;
@@ -231,8 +229,8 @@ public class AddEquipmentItem {
         if (confirm) {
             String orderNo = "";
             while (!VerifyInputs.verifyNoInput(orderNo, INFO_LEN.ORDER_NO.getLength(), false)) {
-                System.out.println(LineGenerator.generateLine("Enter the Equipment's Height"));
-                System.out.print("Height: ");
+                System.out.println(LineGenerator.generateLine("Enter the Equipment's Order no"));
+                System.out.print("Order no: ");
                 orderNo = scanner.nextLine();
             }
             equipmentRecord.addOrderNo(orderNo);
@@ -289,6 +287,8 @@ public class AddEquipmentItem {
 
     private void ModelNo() {
         boolean confirm = true;
+        
+        
         if (!equipmentRecord.getModelNo().equals("null")) {
             System.out.println("You Already Filled This Section. Would You Like to Edit? (Y/N)");
             System.out.print("Option: ");
@@ -296,10 +296,11 @@ public class AddEquipmentItem {
             confirm = (input.toLowerCase().charAt(0) == 'y') ? true : false;
         }
 
+      
         if (confirm) {
             String modelNo = "";
             while (!VerifyInputs.verifyNoInput(modelNo, INFO_LEN.MODEL_NO.getLength(), false)
-                    && VerifyInputs.verifyModelExists(modelNo)) {
+                    || !VerifyInputs.verifyModelExists(modelNo)) {
                 System.out.println(LineGenerator.generateLine("Enter the Equipment's Model No"));
                 System.out.print("Model No: ");
                 modelNo = scanner.nextLine();

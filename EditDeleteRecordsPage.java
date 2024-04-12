@@ -152,12 +152,11 @@ public class EditDeleteRecordsPage {
 
         // Get name of menu option, current placeholder is implemented
         String equipName = "Equipment Name Placeholder(SerialNumber)";
-        String[] editableFields = ParseEditableFields(menuOption);
+       
 
         System.out.println(LineGenerator.generateLine("Edit" + equipName));
         System.out.println(LineGenerator.generateLine("Please Enter the Exact Name of the Field to Edit"));
 
-        DisplayTable(menuOption, editableFields);
         LineGenerator.MainOrChange();
 
         String fieldOption = scanner.nextLine();
@@ -182,9 +181,7 @@ public class EditDeleteRecordsPage {
     }
 
     private String UpdateData(String updateValue, String fieldOption) {
-        // Call the query manager to update it and pass it a specific value
-        // have the query manager return a success message or a error message of what
-        // went wrong.
+        
         if (Main.databaseEnabled) {
             String result = QueryManager.updateFieldRecords(fieldOption, updateValue);
             return result;
@@ -194,36 +191,36 @@ public class EditDeleteRecordsPage {
 
     }
 
-    private String[] ParseEditableFields(String menuOption) {
-        // make a call to query manager to get the column names of editable fields.
-        String[] placeholder = { "field1", "field2", "field3" };
-        return placeholder;
-    }
+//    private String[] ParseEditableFields(String menuOption) {
+//        // make a call to query manager to get the column names of editable fields.
+//        String[] placeholder = { "field1", "field2", "field3" };
+//        return placeholder;
+//    }
+//
+//    private List<List<String>> GetSerialNumberSpecificTable(String menuOption) {
+//
+//        // this will be a call to a query manager and the return type of the query
+//        // manager will ber String[][]
+//        String[][] placeholder = {
+//                { "data1", "data1", "data1" },
+//                { "data2", "data2", "data2" },
+//                { "data3", "data3", "data3" } };
+//
+//        List<List<String>> placeholderList = new ArrayList<>();
+//        for (String[] row : placeholder) {
+//            List<String> rowList = new ArrayList<>();
+//            for (String value : row) {
+//                rowList.add(value);
+//            }
+//            placeholderList.add(rowList);
+//        }
+//        return placeholderList;
+//    }
 
-    private List<List<String>> GetSerialNumberSpecificTable(String menuOption) {
-
-        // this will be a call to a query manager and the return type of the query
-        // manager will ber String[][]
-        String[][] placeholder = {
-                { "data1", "data1", "data1" },
-                { "data2", "data2", "data2" },
-                { "data3", "data3", "data3" } };
-
-        List<List<String>> placeholderList = new ArrayList<>();
-        for (String[] row : placeholder) {
-            List<String> rowList = new ArrayList<>();
-            for (String value : row) {
-                rowList.add(value);
-            }
-            placeholderList.add(rowList);
-        }
-        return placeholderList;
-    }
-
-    private void DisplayTable(String menuOption, String[] placeholder) {
-        System.out.println(LineGenerator.generateLine("Table"));
-        List<List<String>> tableData = GetSerialNumberSpecificTable(menuOption);
-        TableDisplayGenerator.GenerateTableWithData(placeholder, tableData);
-        return;
-    }
+//    private void DisplayTable(String menuOption, String[] placeholder) {
+//        System.out.println(LineGenerator.generateLine("Table"));
+//        List<List<String>> tableData = GetSerialNumberSpecificTable(menuOption);
+//        TableDisplayGenerator.GenerateTableWithData(placeholder, tableData);
+//        return;
+//    }
 }
