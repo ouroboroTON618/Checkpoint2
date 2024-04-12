@@ -1,14 +1,14 @@
 
 import java.util.*;
 
-public class AddRecords {
+public class AddEquipmentItem {
 
     private Scanner scanner;
     private HashMap<String, String> inputs;
     private HashSet<String> skipInputs;
     private EquipmentObject equipmentRecord;
 
-    public AddRecords() {
+    public AddEquipmentItem() {
 
         equipmentRecord = new EquipmentObject();
 
@@ -61,8 +61,12 @@ public class AddRecords {
 
         if (equipmentRecord.checkCompleted()) {
             if (Main.databaseEnabled) {
-                String result = QueryManager.addNewRecord(inputs);
+                String result = QueryManager.addNewEquipItem(equipmentRecord);
                 System.out.println(result);
+
+                // Display in database
+                ResultPackage resultQuery = QueryManager.getRecord(Integer.parseInt(equipmentRecord.getSerialNo()));
+                TableDisplayGenerator.GenerateTable(resultQuery);
             } else {
                 System.out.println("Database Disabled: New Record Added");
             }
@@ -78,30 +82,21 @@ public class AddRecords {
         System.out.println(LineGenerator.generateLine("Option (A): Serial_no  : " + equipmentRecord.getSerialNo()));
         System.out.println(
                 LineGenerator.generateLine("Option (B): Manufacturer  : " + equipmentRecord.getManufacturer()));
-        System.out.println(LineGenerator.generateLine("Option (C): Rental_no  : " + equipmentRecord.getRentalNo()));
-        System.out.println(LineGenerator.generateLine("Option (D): Type  : " + equipmentRecord.getType()));
-        System.out.println(LineGenerator.generateLine("Option (E): Model_no  : " + equipmentRecord.getModelNo()));
         System.out
-                .println(LineGenerator.generateLine("Option (F): Description  : " + equipmentRecord.getDescription()));
-        System.out.println(LineGenerator.generateLine("Option (G): Condition  : " + equipmentRecord.getCondition()));
-        System.out.println(LineGenerator.generateLine("Option (H): Length  : " + equipmentRecord.getLength()));
-        System.out.println(LineGenerator.generateLine("Option (I): Width  : " + equipmentRecord.getWidth()));
-        System.out.println(LineGenerator.generateLine("Option (J): Height  : " + equipmentRecord.getHeight()));
-        System.out.println(LineGenerator.generateLine("Option (K): Weight  : " + equipmentRecord.getWeight()));
-        System.out.println(LineGenerator.generateLine("Option (L): Warrant_exp  : " + equipmentRecord.getWarrantExp()));
-        System.out.println(LineGenerator.generateLine("Option (M): Year  : " + equipmentRecord.getYear()));
-        System.out.println(LineGenerator.generateLine("Option (N): Rental_rate  : " + equipmentRecord.getRentalRate()));
+                .println(LineGenerator.generateLine("Option (C): Order Number  : " + equipmentRecord.getOrderNo()));
+        System.out
+                .println(
+                        LineGenerator.generateLine("Option (D): Purchase Price  : " + equipmentRecord.getPurchasePr()));
+
+        System.out.println(LineGenerator.generateLine("Option (E): Model_no  : " + equipmentRecord.getModelNo()));
+        System.out.println(LineGenerator.generateLine("Option (F): Warrant_exp  : " + equipmentRecord.getWarrantExp()));
+        System.out.println(LineGenerator.generateLine("Option (G): Year  : " + equipmentRecord.getYear()));
+
+        System.out.println(LineGenerator.generateLine("Option (H): Rental_rate  : " + equipmentRecord.getRentalRate()));
         System.out.println(
-                LineGenerator.generateLine("Option (O): Rental_status  : " + equipmentRecord.getRentalStatus()));
-        System.out.println(LineGenerator.generateLine("Option (P): Purchase_pr  : " + equipmentRecord.getPurchasePr()));
-        System.out.println(LineGenerator.generateLine("Option (Q): Order_no  : " + equipmentRecord.getOrderNo()));
-        System.out.println(LineGenerator.generateLine("Option (R): Est_arr  : " + equipmentRecord.getEstArr()));
-        System.out.println(LineGenerator.generateLine("Option (S): Arr  : " + equipmentRecord.getArr()));
-        System.out.println(LineGenerator.generateLine("Option (T): Due_date  : " + equipmentRecord.getDueDate()));
-        System.out.println(LineGenerator.generateLine("Option (U): Pickup  : " + equipmentRecord.getPickup()));
-        System.out.println(LineGenerator.generateLine("Option (V): Addit_fees  : " + equipmentRecord.getAdditFees()));
-        System.out.println(LineGenerator.generateLine("Option (W): Return_cond  : " + equipmentRecord.getReturnCond()));
-        System.out.println(LineGenerator.generateLine("Option (Y): EXIT FIELD SELECTION"));
+                LineGenerator.generateLine("Option (H): Rental_status  : " + equipmentRecord.getRentalStatus()));
+
+        System.out.println(LineGenerator.generateLine("Option (Y): EXIT FIELD SELECTION TO SUBMIT"));
         System.out.println(LineGenerator.generateLine("Option (Z): RETURN TO MAIN PAGE"));
         FieldSelect();
         return;
@@ -121,76 +116,26 @@ public class AddRecords {
                 Manufacturer();
                 break;
             case 'c':
-                // skip rentalNo
-                System.out.println("Don't think this needs to be part of the query");
+                Order_no();
                 break;
             case 'd':
-                Type();
+                PurchasePrice();
                 break;
             case 'e':
                 ModelNo();
                 break;
             case 'f':
-                Description();
-                break;
-            case 'g':
-                Condition();
-                break;
-            case 'h':
-                Length();
-                break;
-            case 'i':
-                Width();
-                break;
-            case 'j':
-                Height();
-                break;
-            case 'k':
-                Height();
-                break;
-            case 'l':
                 WarrantExp();
                 break;
-            case 'm':
+            case 'g':
                 Year();
                 break;
-            case 'n':
+
+            case 'h':
                 RentalRate();
                 break;
-            case 'o':
-                RentalRate();
-                break;
-            case 'p':
-                System.out.println("Don't think this needs to be part of the query");
-                // System.out.println("Option (a-z): Purchase_pr");
-                break;
-            case 'q':
-                System.out.println("Don't think this needs to be part of the query");
-                // System.out.println("Option (a-z): Order_no");
-                break;
-            case 'r':
-                System.out.println("Don't think this needs to be part of the query");
-                // System.out.println("Option (a-z): Est_arr");
-                break;
-            case 's':
-                System.out.println("Don't think this needs to be part of the query");
-                // System.out.println("Option (a-z): Arr");
-                break;
-            case 't':
-                System.out.println("Don't think this needs to be part of the query");
-                // System.out.println("Option (a-z): Due_date");
-                break;
-            case 'u':
-                System.out.println("Don't think this needs to be part of the query");
-                // System.out.println("Option (a-z): Pickup");
-                break;
-            case 'v':
-                System.out.println("Don't think this needs to be part of the query");
-                // System.out.println("Option (a-z): Addit_fees");
-                break;
-            case 'w':
-                System.out.println("Don't think this needs to be part of the query");
-                // ReturnCond();
+            case 'i':
+                Rental_status();
                 break;
             case 'y':
                 MenuItems();
@@ -205,28 +150,6 @@ public class AddRecords {
                 break;
         }
         return;
-    }
-
-    private void ReturnCond() {
-        // boolean confirm = true;
-        // if (!equipmentRecord.getModelNo().equals("null")) {
-        // System.out.println("You Already Filled This Section. Would You Like to Edit?
-        // (Y/N)");
-        // System.out.print("Option: ");
-        // String input = scanner.nextLine();
-        // confirm = (input.toLowerCase().charAt(0) == 'y') ? true : false;
-        // }
-
-        // if (confirm) {
-        // String modelNo = "";
-        // while (!VerifyInputs.verifyNoInput(modelNo, INFO_LEN.MODEL_NO.getLength())) {
-        // System.out.println(LineGenerator.generateLine("Enter the Equipment's Model
-        // No"));
-        // System.out.print("Model No: ");
-        // modelNo = scanner.nextLine();
-        // }
-        // }
-        System.out.println("Delete later");
     }
 
     private void RentalRate() {
@@ -296,9 +219,9 @@ public class AddRecords {
         return;
     }
 
-    private void Height() {
+    private void Order_no() {
         boolean confirm = true;
-        if (!equipmentRecord.getHeight().equals("null")) {
+        if (!equipmentRecord.getOrderNo().equals("null")) {
             System.out.println("You Already Filled This Section. Would You Like to Edit? (Y/N)");
             System.out.print("Option: ");
             String input = scanner.nextLine();
@@ -306,21 +229,21 @@ public class AddRecords {
         }
 
         if (confirm) {
-            String height = "";
-            while (!VerifyInputs.verifyNoInput(height, 0, true)) {
+            String orderNo = "";
+            while (!VerifyInputs.verifyNoInput(orderNo, INFO_LEN.ORDER_NO.getLength(), false)) {
                 System.out.println(LineGenerator.generateLine("Enter the Equipment's Height"));
                 System.out.print("Height: ");
-                height = scanner.nextLine();
+                orderNo = scanner.nextLine();
             }
-            equipmentRecord.addHeight(height);
+            equipmentRecord.addOrderNo(orderNo);
         }
         FieldSelection();
         return;
     }
 
-    private void Width() {
+    private void Rental_status() {
         boolean confirm = true;
-        if (!equipmentRecord.getWidth().equals("null")) {
+        if (!equipmentRecord.getRentalStatus().equals("null")) {
             System.out.println("You Already Filled This Section. Would You Like to Edit? (Y/N)");
             System.out.print("Option: ");
             String input = scanner.nextLine();
@@ -328,21 +251,23 @@ public class AddRecords {
         }
 
         if (confirm) {
-            String width = "";
-            while (!VerifyInputs.verifyNoInput(width, 0, true)) {
-                System.out.println(LineGenerator.generateLine("Enter the Equipment's width"));
-                System.out.print("Width: ");
-                width = scanner.nextLine();
+            String rentalStatus = "";
+            while (!VerifyInputs.verifyRentalStatus(rentalStatus)) {
+                System.out
+                        .println(LineGenerator
+                                .generateLine("Enter the Equipment's Rental Status (Available/Unavailable)"));
+                System.out.print("Status: ");
+                rentalStatus = scanner.nextLine();
             }
-            equipmentRecord.addWidth(width);
+            equipmentRecord.addRentalStatus(rentalStatus);
         }
         FieldSelection();
         return;
     }
 
-    private void Length() {
+    private void PurchasePrice() {
         boolean confirm = true;
-        if (!equipmentRecord.getLength().equals("null")) {
+        if (!equipmentRecord.getPurchasePr().equals("null")) {
             System.out.println("You Already Filled This Section. Would You Like to Edit? (Y/N)");
             System.out.print("Option: ");
             String input = scanner.nextLine();
@@ -350,57 +275,13 @@ public class AddRecords {
         }
 
         if (confirm) {
-            String length = "";
-            while (!VerifyInputs.verifyNoInput(length, 0, true)) {
-                System.out.println(LineGenerator.generateLine("Enter the Equipment's Length"));
-                System.out.print("Length: ");
-                length = scanner.nextLine();
+            String price = "";
+            while (!VerifyInputs.verifyNoInput(price, 0, true)) {
+                System.out.println(LineGenerator.generateLine("Enter the purchase price of this item"));
+                System.out.print("Price (Omit $: only integers allowed): ");
+                price = scanner.nextLine();
             }
-            equipmentRecord.addLength(length);
-        }
-        FieldSelection();
-        return;
-    }
-
-    private void Condition() {
-        boolean confirm = true;
-        if (!equipmentRecord.getCondition().equals("null")) {
-            System.out.println("You Already Filled This Section. Would You Like to Edit? (Y/N)");
-            System.out.print("Option: ");
-            String input = scanner.nextLine();
-            confirm = (input.toLowerCase().charAt(0) == 'y') ? true : false;
-        }
-
-        if (confirm) {
-            String cond = "";
-            while (!VerifyInputs.verifyCond(cond)) {
-                System.out.println(LineGenerator.generateLine("Enter the Equipment's Condition"));
-                System.out.print("Condition: ");
-                cond = scanner.nextLine();
-            }
-            equipmentRecord.addCondition(cond);
-        }
-        FieldSelection();
-        return;
-    }
-
-    private void Description() {
-        boolean confirm = true;
-        if (!equipmentRecord.getDescription().equals("null")) {
-            System.out.println("You Already Filled This Section. Would You Like to Edit? (Y/N)");
-            System.out.print("Option: ");
-            String input = scanner.nextLine();
-            confirm = (input.toLowerCase().charAt(0) == 'y') ? true : false;
-        }
-
-        if (confirm) {
-            String desc = "";
-            while (!VerifyInputs.verifyStringOnly(desc)) {
-                System.out.println(LineGenerator.generateLine("Enter the Equipment's Description"));
-                System.out.print("Description: ");
-                desc = scanner.nextLine();
-            }
-            equipmentRecord.addDescription(desc);
+            equipmentRecord.addPurchasePr(price);
         }
         FieldSelection();
         return;
@@ -417,35 +298,13 @@ public class AddRecords {
 
         if (confirm) {
             String modelNo = "";
-            while (!VerifyInputs.verifyNoInput(modelNo, INFO_LEN.MODEL_NO.getLength(), false)) {
+            while (!VerifyInputs.verifyNoInput(modelNo, INFO_LEN.MODEL_NO.getLength(), false)
+                    && VerifyInputs.verifyModelExists(modelNo)) {
                 System.out.println(LineGenerator.generateLine("Enter the Equipment's Model No"));
                 System.out.print("Model No: ");
                 modelNo = scanner.nextLine();
             }
             equipmentRecord.addModelNo(modelNo);
-        }
-        FieldSelection();
-        return;
-    }
-
-    private void Type() {
-        boolean confirm = true;
-        if (!equipmentRecord.getType().equals("null")) {
-            System.out.println("You Already Filled This Section. Would You Like to Edit? (Y/N)");
-            System.out.print("Option: ");
-            String input = scanner.nextLine();
-            confirm = (input.toLowerCase().charAt(0) == 'y') ? true : false;
-        }
-
-        if (confirm) {
-            String type = "";
-            while (!VerifyInputs.verifyStringOnly(type)) {
-                System.out.println(LineGenerator.generateLine("Enter the Equipment's Type"));
-                System.out.print("Type: ");
-                type = scanner.nextLine();
-            }
-            equipmentRecord.addType(type);
-
         }
         FieldSelection();
         return;
@@ -484,11 +343,11 @@ public class AddRecords {
             confirm = (input.toLowerCase().charAt(0) == 'y') ? true : false;
         }
 
+        // TODO:Might have to check the logic here
         if (confirm) {
             System.out.println("confirm is " + confirm);
             String serialNo = "";
-            while (!VerifyInputs.verifySerialNo(serialNo)) {
-                System.out.println("verify is " + false);
+            while (!VerifyInputs.verifySerialNo(serialNo) || VerifyInputs.verifySerialNoExistOnly(serialNo)) {
                 System.out.println(LineGenerator.generateLine("Enter the equipment's serial no"));
                 System.out.print("Serial No: ");
                 serialNo = scanner.nextLine();

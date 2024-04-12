@@ -33,13 +33,13 @@ public class SearchPage {
                 Main.DisplayMenuPrompt();
                 break;
             case 'a':
-                SearchRecords();
+                SearchEquipmentItem();
                 break;
             case 'b':
                 SearchMember();
                 break;
             case 'c':
-                SearchEquipment();
+                SearchEquipmentName();
                 break;
             default:
                 System.out.println("Invalid Input: Please Enter a valid input");
@@ -90,7 +90,7 @@ public class SearchPage {
         DisplayResults(Type.MEMBER_ID, memberID);
     }
 
-    private void SearchRecords() {
+    private void SearchEquipmentItem() {
         String serialNo = "";
         while (!VerifyInputs.verifySerialNo(serialNo)) {
             System.out.println(LineGenerator.generateLine("Enter serial number of record to search: "));
@@ -100,7 +100,7 @@ public class SearchPage {
         DisplayResults(Type.SERIAL_NUM, serialNo);
     }
 
-    private void SearchEquipment() {
+    private void SearchEquipmentName() {
         String type = "";
         while (!VerifyInputs.VerifyEquipmentType(type)) {
             System.out.println(LineGenerator.generateLine("Enter the Type of Equipment(Type)"));

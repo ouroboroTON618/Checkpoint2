@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Scanner;
+
 public class LineGenerator {
 
     private static boolean debug = false;
@@ -41,5 +44,34 @@ public class LineGenerator {
         System.out.println(LineGenerator.generateLine("Please Select (S) to return to Options Menu"));
         System.out.println(LineGenerator.generateLine("Please Select a Menu Option Or M to return to Main Page"));
     }
+
+    public static String GetFirstDataVal(ResultPackage result) {
+
+        List<List<String>> tableData = result.getTableData();
+        if (!tableData.isEmpty()) {
+            List<String> firstRow = tableData.get(0);
+            if (!firstRow.isEmpty()) {
+                String firstDataValue = firstRow.get(0);
+                return firstDataValue;
+            } else {
+                return "";
+            }
+        } else {
+            System.out.println("There is no data in the table");
+            return "";
+        }
+
+    }
+
+    public static boolean ConditionalCheck(STATEMENT Statement) {
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println(Statement);
+        System.out.print("Option: ");
+        String input = scan.nextLine();
+        return VerifyInputs.verifyYNInput(input);
+    }
+    
+   
 
 }

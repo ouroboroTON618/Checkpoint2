@@ -8,16 +8,18 @@ public class Main {
     private static EditDeleteRecordsPage editDeletePage;
     private static UsefulReportsPage usefulPage;
     private static SearchPage SPage;
-    private static AddRecords addRecPage;
+    private static AddEquipmentItem addRecPage;
+    private static ReturnRentalPage returnPage;
+
+    private static ConfirmDelivered confirm;
     public static Connection conn;
     public static boolean databaseEnabled = true;
     private static Scanner scanner;
     public static boolean debugMode = true;
 
-
-/*
- * This is merely a git test
- */
+    /*
+     * This is merely a git test
+     */
     /*
      * Find if a given record exists
      */
@@ -30,7 +32,7 @@ public class Main {
      * Add a new record to database
      */
     private static void AddRecord(Scanner scanner) {
-        addRecPage = new AddRecords();
+        addRecPage = new AddEquipmentItem();
         return;
     }
 
@@ -53,16 +55,28 @@ public class Main {
         return;
     }
 
+    private static void Return_PickUp() {
+        returnPage = new ReturnRentalPage();
+        return;
+    }
+
+    private static void Confirm_Delivery() {
+        confirm = new ConfirmDelivered();
+        return;
+    }
+
     /*
      * Menu with all options for the user
      */
     public static void DisplayMenuPrompt() {
         System.out.println("Choose one of the following menu options:");
-        System.out.println("1. Add new records");
+        System.out.println("1. Add new equipment item");
         System.out.println("2. Edit/delete records");
         System.out.println("3. Search");
-        System.out.println("4. Rent/Return equipment");
+        System.out.println("4. Rent / Schedule Delivery Equipment");
         System.out.println("5. Useful Reports");
+        System.out.println("6. Return / Schedule Return Pickup Equipment");
+        System.out.println("7. Confirm Delivery Page");
         System.out.println("10. Exit");
         System.out.print("Option: ");
         MenuSelect();
@@ -89,9 +103,10 @@ public class Main {
                 break;
             case 6:
 
+                Return_PickUp();
                 break;
             case 7:
-
+                Confirm_Delivery();
                 break;
             case 10:
                 Exit();
@@ -112,7 +127,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        EquipManager equipmentList = new EquipManager();
+
         scanner = new Scanner(System.in);
         boolean exit = false;
         int option;
