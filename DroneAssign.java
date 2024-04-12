@@ -30,7 +30,7 @@ public class DroneAssign {
             String resultL = QueryManager.addNewDeliveryRecord(rentalNo, droneNo, itemSerialNo);
             System.out.println(result);
             
-            ResultPackage dataResult = QueryManager.getDeliveryRecords(rentalNo);
+            ResultPackage dataResult = QueryManager.getDroneDeliveryStatus(rentalNo);
 
             if(!dataResult.getData().isEmpty()) {
                 System.out.println(LineGenerator.generateLine("Drone has been assigned"));
@@ -60,7 +60,7 @@ public class DroneAssign {
 
         System.out.println(LineGenerator.generateLine("Drone " + droneNo + " will be on it's way!"));
         String resultS = QueryManager.updateDroneDelivery(droneNo);
-        ResultPackage result = QueryManager.getDeliveryRecords(droneNo);
+        ResultPackage result = QueryManager.getDroneDeliveryStatus(droneNo);
         
         if(!result.getData().isEmpty()) {
 	        TableDisplayGenerator.GenerateTable(result);
@@ -91,7 +91,7 @@ public class DroneAssign {
 
     public static void DroneFinished(int droneSerial) {
         String resultUpdate = QueryManager.updateDroneDeliveryStatus(droneSerial);
-        ResultPackage result = QueryManager.getDeliveryRecords(droneSerial);
+        ResultPackage result = QueryManager.getDroneDeliveryStatus(droneSerial);
         TableDisplayGenerator.GenerateTable(result);
     }
 }

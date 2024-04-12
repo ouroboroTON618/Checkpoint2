@@ -418,8 +418,8 @@ public class QueryManager {
      * @param rentalNo
      * @return
      */
-    public static ResultPackage getDeliveryRecords(int rentalNo) {
-        String sql = "SELECT * FROM DELIVERY WHERE Rental_no = ?;";
+    public static ResultPackage getDroneDeliveryStatus(int rentalNo) {
+        String sql = "SELECT Serial_no, Deliv_status FROM DRONE WHERE Serial_no = ?;";
         try {
             ps = Main.conn.prepareStatement(sql);
 
@@ -588,17 +588,18 @@ public class QueryManager {
      * @return
      */
     public static String addRentEquipment(EquipmentRentalObject item) {
-        String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no,Model_no,Order_no, Est_arr, Due_date) VALUES (?, (SELECT Manufacturer FROM EQP_ITEM WHERE Serial_no = ?), ?, ?,?,?,?);";
-
+        String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_rate, Rental_no,Model_no,Order_no, Est_arr, Due_date)"
+        		+ " VALUES (?, (SELECT Manufacturer FROM EQP_ITEM WHERE Serial_no = ?), (SELECT Rental_rate FROM EQP_ITEM WHERE Serial_no = ?), ?, ?,?,?,?);";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(item.getSerialNo()));
             ps.setInt(2,Integer.parseInt(item.getSerialNo()));
-            ps.setInt(3, Integer.parseInt(item.getRentalNo()));
-            ps.setInt(4, Integer.parseInt(item.getModelNo()));
-            ps.setInt(5, Integer.parseInt(item.getOrderNo()));
-            ps.setString(6, item.getEstArr());
-            ps.setString(7, item.getDueDate());
+            ps.setInt(3,Integer.parseInt(item.getSerialNo()));
+            ps.setInt(4, Integer.parseInt(item.getRentalNo()));
+            ps.setInt(5, Integer.parseInt(item.getModelNo()));
+            ps.setInt(6, Integer.parseInt(item.getOrderNo()));
+            ps.setString(7, item.getEstArr());
+            ps.setString(8, item.getDueDate());
             return QueryPrepare.updateQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
