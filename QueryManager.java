@@ -1,6 +1,8 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class QueryManager {
@@ -171,37 +173,52 @@ public class QueryManager {
      * @param serialno
      * @return
      */
-    public static String getItemWeight(int serialno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getItemWeight'");
+    public static ResultPackage getItemWeight(int serialno) {
+    	String sql = "SELECT Weight\r\n"
+    			+ "FROM EQP_TYPE AS TYPE JOIN EQP_ITEM ITEM ON TYPE.Model_no = ITEM.Model_no\r\n"
+    			+ "WHERE Serial_no = ?";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serialno);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
-     * Need the drone serial numbers and their model id numbers and all of their
-     * model id information of drones that are can carry the item weight, is located
-     * at hte same warehouse and can travel to the user. The drone's Inactive and
-     * delivery status must be avaliable
-     * May not need the dist attrivute. You can change all values into int's
+     * Gets Drone Serial num, Type id and Model no of drones that are available
      * 
-     * @param itemWeight
-     * @param warehouse
-     * @param dist
      * @return
      */
-    public static ResultPackage getRequiredDrone(String itemWeight, String warehouse, String dist) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRequiredDrone'");
+    public static ResultPackage getRequiredDrone() {
+        String sql = "SELECT Serial_no, Type_id, Model_no\r\n"
+        		+ "FROM DRONE AS d JOIN DRONE_TYPE AS t ON d.Type_id=t.Type_id\r\n"
+        		+ "WHERE d.Inactive= 'Active'";
+        return QueryPrepare.sqlQuery(Main.conn, sql);
+       
     }
 
     /**
-     * Get the warehouse of the member based on the given member ID
+     * Get the closest warehouse of the member based on the given member ID. MIGHT NEED FIX DUE USER_INFO
      * 
      * @param memberId
      * @return
      */
-    public static String getWarehouse(USER_INFO memberId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getWarehouse'");
+    public static ResultPackage getWarehouse(USER_INFO memberId) {
+    	int member_id = (int) memberId.getValue();
+        String sql = "SELECT wh.Closest_warehouse\r\n"
+        		+ "FROM MEMBER AS m JOIN MEMBER_CLOSE_WH AS wh ON m.Address=wh.Address\r\n"
+        		+ "WHERE m.Member_id=?";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, member_id);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -398,6 +415,7 @@ public class QueryManager {
 
     }
 
+    //-------------------------------tina-------------------------
     /**
      * Get all the model Numbers from equp_type
      * 
@@ -450,6 +468,19 @@ public class QueryManager {
     public static ResultPackage getBulkOrder(String rentalNo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getBulkOrder'");
+    }
+    
+    public static Date convertDate(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date utilDate;
+        try {
+            utilDate = sdf.parse(date);
+            return new java.sql.Date(utilDate.getTime());
+        } catch (ParseException e) {
+
+            e.printStackTrace();
+            return null;
+        } 
     }
 
 }

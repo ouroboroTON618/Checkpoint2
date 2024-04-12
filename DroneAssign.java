@@ -15,7 +15,7 @@ public class DroneAssign {
         String dist = QueryManager.getItemWeight(serialno);
         // Find drone models id's and their model id info of avaliable drones that meet
         // this info
-        ResultPackage result = QueryManager.getRequiredDrone(itemWeight, warehouse, dist);
+        ResultPackage result = QueryManager.getRequiredDrone();
         TableDisplayGenerator.GenerateTable(result);
 
         // single drone id type
