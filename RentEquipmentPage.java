@@ -31,18 +31,9 @@ public class RentEquipmentPage {
     private void MenuItems() {
         dataComplete = checkComplete();
         System.out.println(LineGenerator.generateLine("Equipment Rental"));
-        // System.out.println(LineGenerator.generateLine("You have selected (T): " +
-        // rentalStatus.get("Name")));
-        // System.out.println(LineGenerator.generateLine("Delivery Date (D): " +
-        // rentalStatus.get("Delivery Date")));
-        // System.out.println(LineGenerator.generateLine("Return Date (R): " +
-        // rentalStatus.get("Return Date")));
-
-        // //-------------
-
-        // //-----
+    
         System.out.println(LineGenerator.generateLine("Option (A): Select Item(s)"));
-        System.out.println(LineGenerator.generateLine("Option (B): Begin Checkout"));
+        System.out.println(LineGenerator.generateLine("Option (L): Begin Checkout"));
         if (dataComplete) {
             System.out.println(LineGenerator
                     .generateLine("Option(S): All Data Has Been Received. Submit Order and Assign Drone."));
@@ -70,7 +61,6 @@ public class RentEquipmentPage {
     }
 
     private void MenuSelect() {
-
         String menuOption = scanner.nextLine();
         char option = menuOption.toLowerCase().charAt(0);
         switch (option) {
@@ -80,7 +70,7 @@ public class RentEquipmentPage {
             case 'a':
                 AddItems();
                 break;
-            case 'b':
+            case 'l':
                 Checkout();
                 break;
             case 'c':
@@ -125,13 +115,18 @@ public class RentEquipmentPage {
     }
 
     private void Checkout() {
-        for (HashMap.Entry<String, EquipmentRentalObject> entry : cart.entrySet()) {
-            String key = entry.getKey();
-            EquipmentRentalObject value = entry.getValue();
-            CheckoutSelectionTypes(value);
-
+    	System.out.println("We are in checkouts");
+    	
+    	if(cart.size() != 0) {
+	        for (HashMap.Entry<String, EquipmentRentalObject> entry : cart.entrySet()) {
+	            String key = entry.getKey();
+	            EquipmentRentalObject value = entry.getValue();
+	            CheckoutSelectionTypes(value);
+	        }
+        }else {
+        	System.out.println("Please add to your cart.");
+        	MenuItems();
         }
-
     }
 
     public void ItemSelectionTypes() {
@@ -191,7 +186,8 @@ public class RentEquipmentPage {
             RentEQuipSelect();
             addMore = Continue();
         }
-        MenuSelect();
+        MenuItems();
+      
     }
 
     private boolean Continue() {
@@ -243,7 +239,7 @@ public class RentEquipmentPage {
         item.setSerialNo(serial);
         item.setType(type);
         item.setRentalNo(GenerateRentalNo());
-
+        cart.put(serial,item);
     }
 
     private String GetTypeBySerial(String serial) {
@@ -292,7 +288,7 @@ public class RentEquipmentPage {
         item.setSerialNo(serial);
         item.setType(type);
         item.setRentalNo(GenerateRentalNo());
-
+        cart.put(serial,item);
         return;
     }
 
@@ -490,10 +486,12 @@ public class RentEquipmentPage {
         System.out.println(LineGenerator.generateLine("Would You Like to Modify Your Selection? (Y/N)."));
         System.out.print("Option: ");
         String input = scanner.nextLine();
-        if (VerifyInputs.verifyYNInput(input)) {
-            return false;
+       
+        if(input.toLowerCase().charAt(0) == 'y') {
+        	return false;
+        }else {
+        	return true;
         }
-        return true;
     }
 
 }

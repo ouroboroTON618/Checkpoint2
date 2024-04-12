@@ -7,19 +7,20 @@ public class VerifyInputs {
         boolean check = true;
         // YYYY/MM/DD
         // 0123456789
+        
+      
 
         if (date.length() == INFO_LEN.DATE.getLength()) {
-            if (date.charAt(4) == '/' && date.charAt(7) == '/') {
-                for (int i = 0; i < date.length(); i++) {
-                    if (i != 4 || i != 7) {
-                        int num = Character.getNumericValue(date.charAt(i));
-                        if (num == -1) {
-                            check = false;
-                        }
-                    }
-
+        	String dateWithoutSlash = date.replace("/", "");
+        	System.out.println(dateWithoutSlash);
+                for (int i = 0; i < dateWithoutSlash.length(); i++) {
+                   
+                	 char ch = dateWithoutSlash.charAt(i);
+                	    if (!Character.isDigit(ch)) {
+                	        check = false;
+                	        break;
+                	    }
                 }
-            }
         } else {
             check = false;
             System.out.println("Input needs to be a date in the format of YYYY/MM/DD");

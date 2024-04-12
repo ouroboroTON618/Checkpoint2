@@ -16,7 +16,7 @@ enum GET_FIELD {
 enum INFO_LEN {
     MEMBER_ID(4),
     YEAR(4),
-    DATE(9),
+    DATE(10),
     SERIAL_NO(6),
     MODEL_NO(3),
     RENTAL_NO(4),

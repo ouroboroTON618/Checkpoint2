@@ -32,7 +32,7 @@ public class QueryManager {
 
     public static ResultPackage getEquipment(String name) {
 
-        String sql = "SELECT * FROM EQUIPMENT WHERE Type = ?;";
+        String sql = "SELECT EQP_ITEM.* FROM EQP_ITEM INNER JOIN EQP_TYPE ON EQP_ITEM.Manufacturer = EQP_TYPE.Manufacturer AND EQP_ITEM.Model_no = EQP_TYPE.Model_no WHERE EQP_TYPE.Type = ?;";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setString(1, name);
@@ -72,7 +72,7 @@ public class QueryManager {
     }
 
     public static ResultPackage getRecord(int serial_number) {
-        String sql = "SELECT * FROM EQP_TYPE WHERE EQP_TYPE.Type = ?;";
+        String sql = "SELECT * FROM EQUIPMENT WHERE Serial_no = ?;";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, serial_number);
