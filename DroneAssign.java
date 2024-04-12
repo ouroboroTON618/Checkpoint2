@@ -52,7 +52,8 @@ public class DroneAssign {
     public static void BeginDelivery(int droneNo) {
 
         System.out.println(LineGenerator.generateLine("Drone " + droneNo + " will on it's way!"));
-        ResultPackage result = QueryManager.updateDroneDelivery(droneNo);
+        String resultS= QueryManager.updateDroneDelivery(droneNo);
+        ResultPackage result = QueryManager.getDeliveryRecords(droneNo);
         TableDisplayGenerator.GenerateTable(result);
     }
 
@@ -75,7 +76,8 @@ public class DroneAssign {
     }
 
     public static void DroneFinished(int droneSerial) {
-        ResultPackage result = QueryManager.updateDroneDeliveryStatus(droneSerial);
+        String resultUpdate = QueryManager.updateDroneDeliveryStatus(droneSerial);
+        ResultPackage result = QueryManager.getDeliveryRecords(droneSerial);
         TableDisplayGenerator.GenerateTable(result);
     }
 }

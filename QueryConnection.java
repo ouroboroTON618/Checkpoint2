@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class QueryConnection {
     // This class will set up the entire connection part of the database.
 
-    private static String DATABASE = "RentalService.db";
+    private static String DATABASE = "RentalServiceFinal.db";
 
     public static Connection conn;
 

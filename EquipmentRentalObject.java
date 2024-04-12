@@ -10,6 +10,9 @@ public class EquipmentRentalObject {
         HashMap<String, Object> inputs = new HashMap<>();
         inputs.put("Type", null);
         inputs.put("Serial_no", null);
+        inputs.put("Order_no", null);
+        inputs.put("Model_no", null);
+        inputs.put("Manufacturer", null);
         inputs.put("Rental_no", null);
         // inputs.put("Purchase_price", null);
         inputs.put("Est_arr", null);
@@ -36,6 +39,16 @@ public class EquipmentRentalObject {
     public String getRentalNo() {
         return String.valueOf(inputs.get("Rental_no"));
     }
+    
+    public String getManu() {
+        return String.valueOf(inputs.get("Manufacturer"));
+    }
+    public String getOrderNo() {
+        return String.valueOf(inputs.get("Order_no"));
+    }
+    public String getModelNo() {
+        return String.valueOf(inputs.get("Model_no"));
+    }
 
     public String getEstArr() {
         Object value = inputs.get("Est_arr");
@@ -57,6 +70,19 @@ public class EquipmentRentalObject {
 
     public void setSerialNo(String value) {
         inputs.put("Serial_no", value);
+        
+        
+        ResultPackage resultOrderNo = QueryManager.getOrderNo(Integer.parseInt(value));
+        String val1 = LineGenerator.GetFirstDataVal(resultOrderNo);
+        ResultPackage resultModelNo = QueryManager.getModelNo(Integer.parseInt(value));
+        String val = LineGenerator.GetFirstDataVal(resultModelNo);
+        
+        ResultPackage resultManu = QueryManager.getManufact(Integer.parseInt(val));
+        String val3 = LineGenerator.GetFirstDataVal(resultManu);
+        inputs.put("Order_no",val1 );
+        inputs.put("Model_no", val);
+        inputs.put("Manufacturer", val3);
+        
     }
 
     public void setRentalNo(String value) {

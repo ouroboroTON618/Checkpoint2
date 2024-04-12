@@ -1,6 +1,9 @@
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class QueryManager {
@@ -115,7 +118,6 @@ public class QueryManager {
                 + "GROUP BY Manufacturer) "
                 + "HAVING MAX(Count_dist_item)) ";
         return QueryPrepare.sqlQuery(Main.conn, sql);
-
     }
 
     public static ResultPackage getPopularDrone() {
@@ -228,9 +230,17 @@ public class QueryManager {
      * @param droneNo
      * @return
      */
-    public static ResultPackage updateDroneDelivery(int droneNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDroneDelivery'");
+    public static String updateDroneDelivery(int droneNo) {
+    	String sql = "UPDATE DELIVERY SET Drone_status = 'In Transit' WHERE Drone_serial_no = ?;";
+		
+    	 try {
+             ps = Main.conn.prepareStatement(sql);
+             ps.setInt(1, droneNo);
+             return QueryPrepare.updateQuery(Main.conn, ps);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+             return null;
+         }
     }
 
     /**
@@ -238,9 +248,17 @@ public class QueryManager {
      * transt. Make sure these are actually ment for item delivery w kjell/chat i
      * already pinged him. If it isn't for delivery, then ignore
      */
-    public static ResultPackage updateDroneDeliveryStatus(int droneSerial) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDroneDeliveryStatus'");
+    public static String updateDroneDeliveryStatus(int droneSerial) {
+    	String sql = "UPDATE DELIVERY SET Drone_status = 'Avaliable' WHERE Drone_serial_no = ?;";
+    		
+     	 try {
+              ps = Main.conn.prepareStatement(sql);
+              ps.setInt(1, droneSerial);
+              return QueryPrepare.updateQuery(Main.conn, ps);
+          } catch (SQLException e) {
+              System.out.println(e.getMessage());
+              return null;
+          }
     }
 
     /**
@@ -250,8 +268,17 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getDueDate(int serialNum) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDueDate'");
+
+    	String sql = "SELECT Due_date FROM EQUIPMENT WHERE Serial_no = ?;";
+      	 try {
+               ps = Main.conn.prepareStatement(sql);
+               ps.setInt(1, serialNum);
+               return QueryPrepare.sqlQuery(Main.conn, ps);
+           } catch (SQLException e) {
+               System.out.println(e.getMessage());
+               return null;
+           }
+
     }
 
     /**
@@ -263,10 +290,21 @@ public class QueryManager {
      * @return
      */
     public static String updateScheduleRentalInfo(String serialNo, String pickUpdate, int auditFee) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateScheduleRentalInfo'");
+
+    	String sql = "UPDATE EQUIPMENT SET Pickup = ?, Addit_fees = ? WHERE Serial_no = ?;";
+      	 try {
+               ps = Main.conn.prepareStatement(sql);
+               ps.setDate(1, convertDate(pickUpdate));
+               ps.setInt(2, auditFee);
+               ps.setInt(3, Integer.parseInt(serialNo));
+               return QueryPrepare.updateQuery(Main.conn, ps);
+           } catch (SQLException e) {
+               System.out.println(e.getMessage());
+               return null;
+           }
     }
 
+    
     /**
      * Get all relevant info to display the rental info of item serial no in
      * equipment table
@@ -275,8 +313,15 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getRentalItemHistory(int serial) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRentalItemHistory'");
+    	String sql = "SELECT * FROM EQUIPMENT WHERE Serial_no = ?;";
+   	 try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serial);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -286,11 +331,19 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getRentalOrder(String rentalNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRentalOrder'");
+
+    	String sql = "SELECT Serial_no FROM RENTAL WHERE Rental_no = ?;";
+    	 try {
+             ps = Main.conn.prepareStatement(sql);
+             ps.setInt(1, Integer.parseInt(rentalNo));
+             return QueryPrepare.sqlQuery(Main.conn, ps);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+             return null;
+         }
     }
 
-    /**
+    /** --------PUT ON PAUSE---------SKIPPED
      * Insert a new row into the Delivery table. These are the 3 given values, you
      * can get what u need by doing smaller queries with the paramaters provided.
      * //You can get the user's member id for warehouse info at USER_INFO.MEMBER_ID.
@@ -301,6 +354,7 @@ public class QueryManager {
         throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
     }
 
+    
     /**
      * Get all the rows from delivery table that is of the rental No given
      * 
@@ -309,8 +363,16 @@ public class QueryManager {
      */
 
     public static ResultPackage getDeliveryRecords(int rentalNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDeliveryRecords'");
+    	String sql = "SELECT * FROM DELIVERY WHERE Rental_no = ?;";
+   	 try {
+         ps = Main.conn.prepareStatement(sql);
+        
+         ps.setInt(1, rentalNo);
+         return QueryPrepare.sqlQuery(Main.conn, ps);
+     } catch (SQLException e) {
+         System.out.println(e.getMessage());
+         return null;
+     }
     }
 
     /**
@@ -320,8 +382,17 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getReturnRecords(int rentalNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getReturnRecords'");
+    	String sql = "SELECT * FROM RENTAL WHERE Rental_no = ?;";
+    	
+      	 try {
+            ps = Main.conn.prepareStatement(sql);
+           
+            ps.setInt(1, rentalNo);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -332,20 +403,43 @@ public class QueryManager {
      * @return
      */
     public static String updateRentalInfo(int item_serialNo, String conditon) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateRentalInfo'");
+    	String sql = "UPDATE EQUIPMENT SET Return_cond = ? WHERE Serial_no = ?;";
+    	
+   	 try {
+         ps = Main.conn.prepareStatement(sql);
+         ps.setString(1, conditon);
+         ps.setInt(2, item_serialNo);
+         return QueryPrepare.updateQuery(Main.conn, ps);
+     } catch (SQLException e) {
+         System.out.println(e.getMessage());
+         return null;
+     }
+	
+
+    	
+    	
     }
 
+    
     /**
      * Get all the serial Numbers in Equipment table. Only 1 column
      * 
      * @return
      */
     public static ResultPackage getSerialNo() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSerialNo'");
+      
+    	String sql = "SELECT Serial_no FROM EQUIPMENT;";
+    	 try {
+             ps = Main.conn.prepareStatement(sql);
+             return QueryPrepare.sqlQuery(Main.conn, ps);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+             return null;
+         }
+    	
     }
 
+    
     /**
      * Update Equipment with the Arr = date for item serial no = serialNo
      * 
@@ -353,11 +447,25 @@ public class QueryManager {
      * @param date
      * @return
      */
-    public static String updateDeliveryDateDelivered(int serialNo, String date) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDeliveryDateDelivered'");
+    public static String updateDeliveryDateDelivered(int serialNo, int rentalNo, String date) {
+       
+    	String sql = "UPDATE EQUIPMENT SET Arr = ? WHERE Serial_no = ? AND Rental_no = ?;";
+    	 try {
+             ps = Main.conn.prepareStatement(sql);
+             ps.setInt(1, serialNo);
+             ps.setDate(2, convertDate(date));
+             ps.setInt(3, rentalNo);
+             return QueryPrepare.updateQuery(Main.conn, ps);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+             return null;
+         }
+
+    	
+    	
     }
 
+    
     /**
      * Get the drone serialID in Delivery when item serial no = serial Item and
      * rental number = rental NO
@@ -367,11 +475,22 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getDroneID_Item_Rental(int serialItem, int rentalNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDroneID_Item_Rental'");
+    	String sql = "SELECT Drone_serial_no FROM DELIVERY WHERE Item_serial_no = ? AND Rental_no = ?;";
+    	 try {
+             ps = Main.conn.prepareStatement(sql);
+             ps.setInt(1, serialItem);
+             ps.setInt(2, rentalNo);
+             return QueryPrepare.sqlQuery(Main.conn, ps);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+             return null;
+         }
     }
+    
+    
+    
 
-    // ---------------Adding New
+    // ---------------Adding New (SKIPPPPedm COME BACK LATER)
     // Item--------------------------------------------------
     /**
      * Add a new entry into Equip_Item table
@@ -395,7 +514,6 @@ public class QueryManager {
         // return null;
         // }
         return null;
-
     }
 
     /**
@@ -404,30 +522,59 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getModelNo() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getModelNo'");
+    	String sql = "SELECT Model_no FROM EQP_TYPE";
+    	
+   	 try {
+            ps = Main.conn.prepareStatement(sql);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    /**
+    /** ---------Not Working------------------
      * Add a new record inside Equipment table
      * 
      * @param item
      * @return
      */
     public static String addRentEquipment(EquipmentRentalObject item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addRentEquipment'");
+        String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no,Model_no,Order_no, Est_arr, Due_date) VALUES (?, ?, ?, ?,?,?,?);";
+   
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(item.getSerialNo()));
+            ps.setString(2, item.getManu());
+            ps.setInt(3, Integer.parseInt(item.getRentalNo()));
+            ps.setInt(4, Integer.parseInt(item.getModelNo()));
+            ps.setInt(5, Integer.parseInt(item.getOrderNo()));
+            ps.setDate(6, convertDate(item.getEstArr()));
+            ps.setDate(7, convertDate(item.getDueDate()));
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
      * Get all the serial numbers of avaliable items based on specific type
-     * 
      * @param type
      * @return
      */
     public static ResultPackage getSerialByType(String type) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSerialByType'");
+    	String sql = "SELECT EQP_ITEM.Serial_no, EQP_TYPE.Type,EQP_ITEM.Rental_status,EQP_ITEM.Rental_rate FROM EQP_ITEM INNER JOIN EQP_TYPE ON EQP_ITEM.Manufacturer = EQP_TYPE.Manufacturer AND EQP_ITEM.Model_no = EQP_TYPE.Model_no WHERE EQP_TYPE.Type = ? AND EQP_ITEM.Rental_status = 'Available';";
+    	
+    	 try {
+             ps = Main.conn.prepareStatement(sql);
+             ps.setString(1, type);
+             return QueryPrepare.sqlQuery(Main.conn, ps);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+             return null;
+         }
+    	
     }
 
     /**
@@ -436,9 +583,20 @@ public class QueryManager {
      * @param int1
      * @return
      */
-    public static ResultPackage getTypeBySerial(int int1) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTypeBySerial'");
+    public static ResultPackage getTypeBySerial(int serialNo) {
+    	
+         String sql = "SELECT EQP_TYPE.Type FROM EQP_ITEM INNER JOIN EQP_TYPE ON EQP_ITEM.Manufacturer = EQP_TYPE.Manufacturer AND EQP_ITEM.Model_no = EQP_TYPE.Model_no WHERE EQP_ITEM.Serial_no = ?; ";
+         try {
+             ps = Main.conn.prepareStatement(sql);
+             ps.setInt(1, serialNo);
+             return QueryPrepare.sqlQuery(Main.conn, ps);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+             return null;
+         }
+    	
+    	
+    	
     }
 
     /**
@@ -448,8 +606,79 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getBulkOrder(String rentalNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBulkOrder'");
+        int rental = Integer.parseInt(rentalNo);
+        String sql = "SELECT Serial_no,Manufacturer,Rental_no ,Rental_rate,Est_arr,Arr,Due_date,Pickup,Addit_fees,Return_cond FROM EQUIPMENT WHERE Rental_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, rental);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        
     }
+    
+    public static Date convertDate(String date) {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date utilDate;
+		try {
+			utilDate = sdf.parse(date);
+			return new java.sql.Date(utilDate.getTime());
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+			return null;
+		} 
+    }
+
+    /**
+     * Gets the model no of the item
+     * @param parseInt
+     * @return
+     */
+	public static ResultPackage getModelNo(int serial) {
+	     
+	        String sql = "SELECT EQUIPMENT.Model_no FROM EQUIPMENT INNER JOIN EQP_ITEM ON EQUIPMENT.Serial_no = EQP_ITEM.Serial_no WHERE EQUIPMENT.Serial_no = ?;";
+	        try {
+	            ps = Main.conn.prepareStatement(sql);
+	            ps.setInt(1, serial);
+	            return QueryPrepare.sqlQuery(Main.conn, ps);
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	            return null;
+	        }
+	}
+
+	/**
+	 * Gets the order no 
+	 * @param parseInt
+	 * @return
+	 */
+	public static ResultPackage getOrderNo(int parseInt) {
+		String sql = "SELECT Order_no FROM EQP_ITEM WHERE Serial_no = ?;";
+		  try {
+	            ps = Main.conn.prepareStatement(sql);
+	            ps.setInt(1, parseInt);
+	            return QueryPrepare.sqlQuery(Main.conn, ps);
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	            return null;
+	        }
+	}
+
+	public static ResultPackage getManufact(int serialNum) {
+	
+		
+		String sql = "SELECT Manufacturer FROM EQP_ITEM WHERE Serial_no = ?;";
+				  try {
+			            ps = Main.conn.prepareStatement(sql);
+			            ps.setInt(1, serialNum);
+			            return QueryPrepare.sqlQuery(Main.conn, ps);
+			        } catch (SQLException e) {
+			            System.out.println(e.getMessage());
+			            return null;
+			        }
+	}
 
 }

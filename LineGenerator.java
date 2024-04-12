@@ -71,5 +71,7 @@ public class LineGenerator {
         String input = scan.nextLine();
         return VerifyInputs.verifyYNInput(input);
     }
+    
+   
 
 }
