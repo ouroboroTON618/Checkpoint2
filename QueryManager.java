@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.*;
 
 public class QueryManager {
@@ -173,37 +174,53 @@ public class QueryManager {
      * @param serialno
      * @return
      */
-    public static String getItemWeight(int serialno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getItemWeight'");
+    public static ResultPackage getItemWeight(int serialno) {
+        String sql = "SELECT Weight\r\n"
+                + "FROM EQP_TYPE AS TYPE JOIN EQP_ITEM ITEM ON TYPE.Model_no = ITEM.Model_no\r\n"
+                + "WHERE Serial_no = ?";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serialno);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
-     * Need the drone serial numbers and their model id numbers and all of their
-     * model id information of drones that are can carry the item weight, is located
-     * at hte same warehouse and can travel to the user. The drone's Inactive and
-     * delivery status must be avaliable
-     * May not need the dist attrivute. You can change all values into int's
+     * Gets Drone Serial num, Type id and Model no of drones that are available
      * 
-     * @param itemWeight
-     * @param warehouse
-     * @param dist
      * @return
      */
-    public static ResultPackage getRequiredDrone(String itemWeight, String warehouse, String dist) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRequiredDrone'");
+    public static ResultPackage getRequiredDrone() {
+        String sql = "SELECT Serial_no, Type_id, Model_no\r\n"
+                + "FROM DRONE AS d JOIN DRONE_TYPE AS t ON d.Type_id=t.Type_id\r\n"
+                + "WHERE d.Inactive= 'Active'";
+        return QueryPrepare.sqlQuery(Main.conn, sql);
+
     }
 
     /**
-     * Get the warehouse of the member based on the given member ID
+     * Get the closest warehouse of the member based on the given member ID. MIGHT
+     * NEED FIX DUE USER_INFO
      * 
      * @param memberId
      * @return
      */
-    public static String getWarehouse(USER_INFO memberId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getWarehouse'");
+    public static ResultPackage getWarehouse(USER_INFO memberId) {
+        int member_id = (int) memberId.getValue();
+        String sql = "SELECT wh.Closest_warehouse\r\n"
+                + "FROM MEMBER AS m JOIN MEMBER_CLOSE_WH AS wh ON m.Address=wh.Address\r\n"
+                + "WHERE m.Member_id=?";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, member_id);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -217,9 +234,23 @@ public class QueryManager {
      * @param itemSerialNo
      * @return
      */
-    public static String addNewReturnRecord(int rentalNo, int droneNo, int itemSerialNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
+    public static String addNewReturnRecord(int Drone_serial_no, String Drone_type, int Rental_no,
+            int Item_serial_no, String Item_manuf) {
+        String sql = "INSERT INTO Return (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) VALUES (?, ?, ?, ?, ?)\r\n"
+                + "";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, Drone_serial_no);
+            ps.setString(2, Drone_type);
+            ps.setInt(3, Rental_no);
+            ps.setInt(4, Item_serial_no);
+            ps.setString(5, Item_manuf);
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
     /**
@@ -231,16 +262,16 @@ public class QueryManager {
      * @return
      */
     public static String updateDroneDelivery(int droneNo) {
-    	String sql = "UPDATE DELIVERY SET Drone_status = 'In Transit' WHERE Drone_serial_no = ?;";
-		
-    	 try {
-             ps = Main.conn.prepareStatement(sql);
-             ps.setInt(1, droneNo);
-             return QueryPrepare.updateQuery(Main.conn, ps);
-         } catch (SQLException e) {
-             System.out.println(e.getMessage());
-             return null;
-         }
+        String sql = "UPDATE DELIVERY SET Drone_status = 'In Transit' WHERE Drone_serial_no = ?;";
+
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, droneNo);
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -249,16 +280,16 @@ public class QueryManager {
      * already pinged him. If it isn't for delivery, then ignore
      */
     public static String updateDroneDeliveryStatus(int droneSerial) {
-    	String sql = "UPDATE DELIVERY SET Drone_status = 'Avaliable' WHERE Drone_serial_no = ?;";
-    		
-     	 try {
-              ps = Main.conn.prepareStatement(sql);
-              ps.setInt(1, droneSerial);
-              return QueryPrepare.updateQuery(Main.conn, ps);
-          } catch (SQLException e) {
-              System.out.println(e.getMessage());
-              return null;
-          }
+        String sql = "UPDATE DELIVERY SET Drone_status = 'Avaliable' WHERE Drone_serial_no = ?;";
+
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, droneSerial);
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -269,15 +300,15 @@ public class QueryManager {
      */
     public static ResultPackage getDueDate(int serialNum) {
 
-    	String sql = "SELECT Due_date FROM EQUIPMENT WHERE Serial_no = ?;";
-      	 try {
-               ps = Main.conn.prepareStatement(sql);
-               ps.setInt(1, serialNum);
-               return QueryPrepare.sqlQuery(Main.conn, ps);
-           } catch (SQLException e) {
-               System.out.println(e.getMessage());
-               return null;
-           }
+        String sql = "SELECT Due_date FROM EQUIPMENT WHERE Serial_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serialNum);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
 
     }
 
@@ -291,20 +322,19 @@ public class QueryManager {
      */
     public static String updateScheduleRentalInfo(String serialNo, String pickUpdate, int auditFee) {
 
-    	String sql = "UPDATE EQUIPMENT SET Pickup = ?, Addit_fees = ? WHERE Serial_no = ?;";
-      	 try {
-               ps = Main.conn.prepareStatement(sql);
-               ps.setDate(1, convertDate(pickUpdate));
-               ps.setInt(2, auditFee);
-               ps.setInt(3, Integer.parseInt(serialNo));
-               return QueryPrepare.updateQuery(Main.conn, ps);
-           } catch (SQLException e) {
-               System.out.println(e.getMessage());
-               return null;
-           }
+        String sql = "UPDATE EQUIPMENT SET Pickup = ?, Addit_fees = ? WHERE Serial_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setDate(1, convertDate(pickUpdate));
+            ps.setInt(2, auditFee);
+            ps.setInt(3, Integer.parseInt(serialNo));
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    
     /**
      * Get all relevant info to display the rental info of item serial no in
      * equipment table
@@ -313,8 +343,8 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getRentalItemHistory(int serial) {
-    	String sql = "SELECT * FROM EQUIPMENT WHERE Serial_no = ?;";
-   	 try {
+        String sql = "SELECT * FROM EQUIPMENT WHERE Serial_no = ?;";
+        try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, serial);
             return QueryPrepare.sqlQuery(Main.conn, ps);
@@ -332,29 +362,41 @@ public class QueryManager {
      */
     public static ResultPackage getRentalOrder(String rentalNo) {
 
-    	String sql = "SELECT Serial_no FROM RENTAL WHERE Rental_no = ?;";
-    	 try {
-             ps = Main.conn.prepareStatement(sql);
-             ps.setInt(1, Integer.parseInt(rentalNo));
-             return QueryPrepare.sqlQuery(Main.conn, ps);
-         } catch (SQLException e) {
-             System.out.println(e.getMessage());
-             return null;
-         }
+        String sql = "SELECT Serial_no FROM RENTAL WHERE Rental_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(rentalNo));
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    /** --------PUT ON PAUSE---------SKIPPED
+    /**
+     * --------PUT ON PAUSE---------SKIPPED
      * Insert a new row into the Delivery table. These are the 3 given values, you
      * can get what u need by doing smaller queries with the paramaters provided.
      * //You can get the user's member id for warehouse info at USER_INFO.MEMBER_ID.
      * Look at utilities file
      */
     public static String addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
+        String sql = "INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) "
+                + "VALUES (?, (SELECT Type_id FROM DRONE WHERE Serial_no = ?), ?, ?, (SELECT Manufacturer FROM EQUIPMENT WHERE Serial_no = ?))";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, droneNo);
+            ps.setInt(2, droneNo);
+            ps.setInt(3, rentalNo);
+            ps.setInt(4, itemSerialNo);
+            ps.setInt(5, itemSerialNo);
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    
     /**
      * Get all the rows from delivery table that is of the rental No given
      * 
@@ -363,16 +405,16 @@ public class QueryManager {
      */
 
     public static ResultPackage getDeliveryRecords(int rentalNo) {
-    	String sql = "SELECT * FROM DELIVERY WHERE Rental_no = ?;";
-   	 try {
-         ps = Main.conn.prepareStatement(sql);
-        
-         ps.setInt(1, rentalNo);
-         return QueryPrepare.sqlQuery(Main.conn, ps);
-     } catch (SQLException e) {
-         System.out.println(e.getMessage());
-         return null;
-     }
+        String sql = "SELECT * FROM DELIVERY WHERE Rental_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+
+            ps.setInt(1, rentalNo);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -382,11 +424,11 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getReturnRecords(int rentalNo) {
-    	String sql = "SELECT * FROM RENTAL WHERE Rental_no = ?;";
-    	
-      	 try {
+        String sql = "SELECT * FROM RENTAL WHERE Rental_no = ?;";
+
+        try {
             ps = Main.conn.prepareStatement(sql);
-           
+
             ps.setInt(1, rentalNo);
             return QueryPrepare.sqlQuery(Main.conn, ps);
         } catch (SQLException e) {
@@ -403,43 +445,38 @@ public class QueryManager {
      * @return
      */
     public static String updateRentalInfo(int item_serialNo, String conditon) {
-    	String sql = "UPDATE EQUIPMENT SET Return_cond = ? WHERE Serial_no = ?;";
-    	
-   	 try {
-         ps = Main.conn.prepareStatement(sql);
-         ps.setString(1, conditon);
-         ps.setInt(2, item_serialNo);
-         return QueryPrepare.updateQuery(Main.conn, ps);
-     } catch (SQLException e) {
-         System.out.println(e.getMessage());
-         return null;
-     }
-	
+        String sql = "UPDATE EQUIPMENT SET Return_cond = ? WHERE Serial_no = ?;";
 
-    	
-    	
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setString(1, conditon);
+            ps.setInt(2, item_serialNo);
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
-    
     /**
      * Get all the serial Numbers in Equipment table. Only 1 column
      * 
      * @return
      */
     public static ResultPackage getSerialNo() {
-      
-    	String sql = "SELECT Serial_no FROM EQUIPMENT;";
-    	 try {
-             ps = Main.conn.prepareStatement(sql);
-             return QueryPrepare.sqlQuery(Main.conn, ps);
-         } catch (SQLException e) {
-             System.out.println(e.getMessage());
-             return null;
-         }
-    	
+
+        String sql = "SELECT Serial_no FROM EQUIPMENT;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
-    
     /**
      * Update Equipment with the Arr = date for item serial no = serialNo
      * 
@@ -448,24 +485,21 @@ public class QueryManager {
      * @return
      */
     public static String updateDeliveryDateDelivered(int serialNo, int rentalNo, String date) {
-       
-    	String sql = "UPDATE EQUIPMENT SET Arr = ? WHERE Serial_no = ? AND Rental_no = ?;";
-    	 try {
-             ps = Main.conn.prepareStatement(sql);
-             ps.setInt(1, serialNo);
-             ps.setDate(2, convertDate(date));
-             ps.setInt(3, rentalNo);
-             return QueryPrepare.updateQuery(Main.conn, ps);
-         } catch (SQLException e) {
-             System.out.println(e.getMessage());
-             return null;
-         }
 
-    	
-    	
+        String sql = "UPDATE EQUIPMENT SET Arr = ? WHERE Serial_no = ? AND Rental_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serialNo);
+            ps.setDate(2, convertDate(date));
+            ps.setInt(3, rentalNo);
+            return QueryPrepare.updateQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
-    
     /**
      * Get the drone serialID in Delivery when item serial no = serial Item and
      * rental number = rental NO
@@ -475,20 +509,17 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getDroneID_Item_Rental(int serialItem, int rentalNo) {
-    	String sql = "SELECT Drone_serial_no FROM DELIVERY WHERE Item_serial_no = ? AND Rental_no = ?;";
-    	 try {
-             ps = Main.conn.prepareStatement(sql);
-             ps.setInt(1, serialItem);
-             ps.setInt(2, rentalNo);
-             return QueryPrepare.sqlQuery(Main.conn, ps);
-         } catch (SQLException e) {
-             System.out.println(e.getMessage());
-             return null;
-         }
+        String sql = "SELECT Drone_serial_no FROM DELIVERY WHERE Item_serial_no = ? AND Rental_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serialItem);
+            ps.setInt(2, rentalNo);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
-    
-    
-    
 
     // ---------------Adding New (SKIPPPPedm COME BACK LATER)
     // Item--------------------------------------------------
@@ -516,15 +547,16 @@ public class QueryManager {
         return null;
     }
 
+    // -------------------------------tina-------------------------
     /**
      * Get all the model Numbers from equp_type
      * 
      * @return
      */
     public static ResultPackage getModelNo() {
-    	String sql = "SELECT Model_no FROM EQP_TYPE";
-    	
-   	 try {
+        String sql = "SELECT Model_no FROM EQP_TYPE";
+
+        try {
             ps = Main.conn.prepareStatement(sql);
             return QueryPrepare.sqlQuery(Main.conn, ps);
         } catch (SQLException e) {
@@ -533,7 +565,8 @@ public class QueryManager {
         }
     }
 
-    /** ---------Not Working------------------
+    /**
+     * ---------Not Working------------------
      * Add a new record inside Equipment table
      * 
      * @param item
@@ -541,7 +574,7 @@ public class QueryManager {
      */
     public static String addRentEquipment(EquipmentRentalObject item) {
         String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no,Model_no,Order_no, Est_arr, Due_date) VALUES (?, ?, ?, ?,?,?,?);";
-   
+
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(item.getSerialNo()));
@@ -560,21 +593,22 @@ public class QueryManager {
 
     /**
      * Get all the serial numbers of avaliable items based on specific type
+     * 
      * @param type
      * @return
      */
     public static ResultPackage getSerialByType(String type) {
-    	String sql = "SELECT EQP_ITEM.Serial_no, EQP_TYPE.Type,EQP_ITEM.Rental_status,EQP_ITEM.Rental_rate FROM EQP_ITEM INNER JOIN EQP_TYPE ON EQP_ITEM.Manufacturer = EQP_TYPE.Manufacturer AND EQP_ITEM.Model_no = EQP_TYPE.Model_no WHERE EQP_TYPE.Type = ? AND EQP_ITEM.Rental_status = 'Available';";
-    	
-    	 try {
-             ps = Main.conn.prepareStatement(sql);
-             ps.setString(1, type);
-             return QueryPrepare.sqlQuery(Main.conn, ps);
-         } catch (SQLException e) {
-             System.out.println(e.getMessage());
-             return null;
-         }
-    	
+        String sql = "SELECT EQP_ITEM.Serial_no, EQP_TYPE.Type,EQP_ITEM.Rental_status,EQP_ITEM.Rental_rate FROM EQP_ITEM INNER JOIN EQP_TYPE ON EQP_ITEM.Manufacturer = EQP_TYPE.Manufacturer AND EQP_ITEM.Model_no = EQP_TYPE.Model_no WHERE EQP_TYPE.Type = ? AND EQP_ITEM.Rental_status = 'Available';";
+
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setString(1, type);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
     /**
@@ -584,19 +618,17 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getTypeBySerial(int serialNo) {
-    	
-         String sql = "SELECT EQP_TYPE.Type FROM EQP_ITEM INNER JOIN EQP_TYPE ON EQP_ITEM.Manufacturer = EQP_TYPE.Manufacturer AND EQP_ITEM.Model_no = EQP_TYPE.Model_no WHERE EQP_ITEM.Serial_no = ?; ";
-         try {
-             ps = Main.conn.prepareStatement(sql);
-             ps.setInt(1, serialNo);
-             return QueryPrepare.sqlQuery(Main.conn, ps);
-         } catch (SQLException e) {
-             System.out.println(e.getMessage());
-             return null;
-         }
-    	
-    	
-    	
+
+        String sql = "SELECT EQP_TYPE.Type FROM EQP_ITEM INNER JOIN EQP_TYPE ON EQP_ITEM.Manufacturer = EQP_TYPE.Manufacturer AND EQP_ITEM.Model_no = EQP_TYPE.Model_no WHERE EQP_ITEM.Serial_no = ?; ";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serialNo);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
     /**
@@ -616,69 +648,83 @@ public class QueryManager {
             System.out.println(e.getMessage());
             return null;
         }
-        
+
     }
-    
+
     public static Date convertDate(String date) {
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date utilDate;
-		try {
-			utilDate = sdf.parse(date);
-			return new java.sql.Date(utilDate.getTime());
-		} catch (ParseException e) {
-			
-			e.printStackTrace();
-			return null;
-		} 
+        try {
+            utilDate = sdf.parse(date);
+            return new java.sql.Date(utilDate.getTime());
+        } catch (ParseException e) {
+
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * Gets the model no of the item
+     * 
      * @param parseInt
      * @return
      */
-	public static ResultPackage getModelNo(int serial) {
-	     
-	        String sql = "SELECT EQUIPMENT.Model_no FROM EQUIPMENT INNER JOIN EQP_ITEM ON EQUIPMENT.Serial_no = EQP_ITEM.Serial_no WHERE EQUIPMENT.Serial_no = ?;";
-	        try {
-	            ps = Main.conn.prepareStatement(sql);
-	            ps.setInt(1, serial);
-	            return QueryPrepare.sqlQuery(Main.conn, ps);
-	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
-	            return null;
-	        }
-	}
+    public static ResultPackage getModelNo(int serial) {
 
-	/**
-	 * Gets the order no 
-	 * @param parseInt
-	 * @return
-	 */
-	public static ResultPackage getOrderNo(int parseInt) {
-		String sql = "SELECT Order_no FROM EQP_ITEM WHERE Serial_no = ?;";
-		  try {
-	            ps = Main.conn.prepareStatement(sql);
-	            ps.setInt(1, parseInt);
-	            return QueryPrepare.sqlQuery(Main.conn, ps);
-	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
-	            return null;
-	        }
-	}
+        String sql = "SELECT EQUIPMENT.Model_no FROM EQUIPMENT INNER JOIN EQP_ITEM ON EQUIPMENT.Serial_no = EQP_ITEM.Serial_no WHERE EQUIPMENT.Serial_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serial);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
-	public static ResultPackage getManufact(int serialNum) {
-	
-		
-		String sql = "SELECT Manufacturer FROM EQP_ITEM WHERE Serial_no = ?;";
-				  try {
-			            ps = Main.conn.prepareStatement(sql);
-			            ps.setInt(1, serialNum);
-			            return QueryPrepare.sqlQuery(Main.conn, ps);
-			        } catch (SQLException e) {
-			            System.out.println(e.getMessage());
-			            return null;
-			        }
-	}
+    /**
+     * Gets the order no
+     * 
+     * @param parseInt
+     * @return
+     */
+    public static ResultPackage getOrderNo(int parseInt) {
+        String sql = "SELECT Order_no FROM EQP_ITEM WHERE Serial_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, parseInt);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static ResultPackage getManufact(int serialNum) {
+
+        String sql = "SELECT Manufacturer FROM EQP_ITEM WHERE Serial_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serialNum);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static Date convertDate(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date utilDate;
+        try {
+            utilDate = sdf.parse(date);
+            return new java.sql.Date(utilDate.getTime());
+        } catch (ParseException e) {
+
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }
