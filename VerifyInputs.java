@@ -139,18 +139,21 @@ public class VerifyInputs {
     public static boolean verifyNoInput(String input, int length, boolean lenPass) {
         boolean check = true;
 
-        if (input.length() == length || lenPass) {
-            for (int i = 0; i < input.length(); i++) {
-                int num = Character.getNumericValue(input.charAt(i));
-                if (num == -1) {
-                    check = false;
-                }
-            }
-        } else {
-            if (input.length() != 0) {
-                System.out.println("Input needs to be a number of length " + length);
-            }
-            check = false;
+        if(input.length() == 0) {
+	        if (input.length() == length || lenPass) {
+	            for (int i = 0; i < input.length(); i++) {
+	            	char ch = input.charAt(i);
+	        	    if (!Character.isDigit(ch)) {
+	        	        check = false;
+	        	        break;
+	        	    }
+	            }
+	        } else {
+	            if (input.length() != 0) {
+	                System.out.println("Input needs to be a number of length " + length);
+	            }
+	            check = false;
+	        }
         }
         return check;
     }

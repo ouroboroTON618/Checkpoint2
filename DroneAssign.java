@@ -9,9 +9,11 @@ public class DroneAssign {
 
         // Find drone models id's and their model id info of avaliable drones that meet
         // this info
+    	
+    	System.out.println("We are in find drone");
         ResultPackage result = QueryManager.getRequiredDrone();
+        
         TableDisplayGenerator.GenerateTable(result);
-
         // single drone id type
         String serialNo_Drone = droneID();
 
@@ -70,11 +72,16 @@ public class DroneAssign {
             System.out.print("Drone Serial No: ");
             droneID = scan.nextLine();
         }
+        
+        System.out.println("This is drone ID" );
         return droneID;
     }
 
     public static void ScheduleDrone(int item_serial_number, int rentalNo, boolean delivery) {
-        int droneSerial = Integer.parseInt(FindDrone(item_serial_number));
+    	String droneId = FindDrone(item_serial_number);
+    	
+    	System.out.println("This is drone ID");
+        int droneSerial = Integer.parseInt(droneId);
         AssignDrone(droneSerial, rentalNo, item_serial_number, delivery);
         BeginDelivery(droneSerial);
     }

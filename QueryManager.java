@@ -174,8 +174,8 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getItemWeight(int serialno) {
-        String sql = "SELECT Weight\r\n"
-                + "FROM EQP_TYPE AS TYPE JOIN EQP_ITEM ITEM ON TYPE.Model_no = ITEM.Model_no\r\n"
+        String sql = "SELECT Weight"
+                + "FROM EQP_TYPE AS TYPE JOIN EQP_ITEM ITEM ON TYPE.Model_no = ITEM.Model_no"
                 + "WHERE Serial_no = ?";
         try {
             ps = Main.conn.prepareStatement(sql);
@@ -193,10 +193,17 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getRequiredDrone() {
-        String sql = "SELECT Serial_no, Type_id, Model_no\r\n"
-                + "FROM DRONE AS d JOIN DRONE_TYPE AS t ON d.Type_id=t.Type_id\r\n"
-                + "WHERE d.Inactive= 'Active'";
-        return QueryPrepare.sqlQuery(Main.conn, sql);
+    	
+        String sql = "SELECT DRONE.Serial_no, DRONE.Type_id, DRONE_TYPE.Model_no FROM DRONE JOIN DRONE_TYPE ON DRONE.Type_id = DRONE_TYPE.Type_id WHERE DRONE.Deliv_status = 'Delivered';";
+        
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
 
     }
 
@@ -233,23 +240,22 @@ public class QueryManager {
      * @param itemSerialNo
      * @return
      */
-    public static String addNewReturnRecord(int Drone_serial_no, String Drone_type, int Rental_no,
-            int Item_serial_no, String Item_manuf) {
-        String sql = "INSERT INTO Return (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) VALUES (?, ?, ?, ?, ?)\r\n"
-                + "";
+    public static String addNewReturnRecord(int Drone_serial_no, int Rental_no, int Item_serial_no) {
+        String sql = "INSERT INTO RETURN (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf)\r\n"
+        		+ "VALUES (?,(SELECT Type_id FROM DRONE WHERE Serial_no = ?), ?, ?, (SELECT Manufacturer FROM EQUIPMENT WHERE Rental_no = ?));";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, Drone_serial_no);
-            ps.setInt(2, Integer.parseInt(Drone_type));
-            ps.setInt(3, Rental_no);
+            ps.setInt(2, Drone_serial_no);
+            ps.setInt(3, Rental_no); 
             ps.setInt(4, Item_serial_no);
-            ps.setString(5, Item_manuf);
+            ps.setInt(5, Rental_no);
             return QueryPrepare.updateQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
-
+        
     }
 
     /**
@@ -380,15 +386,15 @@ public class QueryManager {
      * Look at utilities file
      */
     public static String addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
-        String sql = "INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) "
-                + "VALUES (?, (SELECT Type_id FROM DRONE WHERE Serial_no = ?), ?, ?, (SELECT Manufacturer FROM EQUIPMENT WHERE Serial_no = ?))";
+    	String sql = "INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) "
+    			+ "VALUES (?, (SELECT Type_id FROM DRONE WHERE Serial_no = ?), ?, ?, (SELECT Manufacturer FROM EQUIPMENT WHERE Serial_no = ?));";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, droneNo);
             ps.setInt(2, droneNo);
             ps.setInt(3, rentalNo);
             ps.setInt(4, itemSerialNo);
-            ps.setInt(5, itemSerialNo);
+            ps.setInt(5, rentalNo);
             return QueryPrepare.updateQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -522,29 +528,32 @@ public class QueryManager {
 
     // ---------------Adding New (SKIPPPPedm COME BACK LATER)
     // Item--------------------------------------------------
-    /**
-     * Add a new entry into Equip_Item table
-     * 
-     * Look at Equipment Object for the paramters
-     */
-    public static String addNewEquipItem(EquipmentObject item) {
-
-        // String sql = "INSERT INTO EQUIPMENT (Serial_no, Manufacturer, Rental_no,
-        // Type, Model_no, Description, Condition, Length, Width, Height, Weight,
-        // Warrant_exp, Year, Rental_rate, Rental_status, Purchase_pr, Order_no,
-        // Est_arr, Arr, Due_date, Pickup, Addit_fees, Return_cond;) VALUES(?,...,?)";
-
-        // try {
-        // ps = Main.conn.prepareStatement(sql);
-        // int count = 1;
-
-        // return QueryPrepare.updateQuery(Main.conn, ps);
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // return null;
-        // }
-        return null;
+ public static String addNewEquipItem(EquipmentObject item) {
+    	
+    	String sql = "INSERT INTO EQP_ITEM (Serial_no, Manufacturer, Model_no, Warrant_exp, Year, Order_no, Purchase_price, Rental_rate, Rental_status)\r\n"
+    			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    	
+    	   try {
+           	ps = Main.conn.prepareStatement(sql);
+               ps.setString(1, item.getSerialNo());
+               ps.setString(2, item.getManufacturer());
+               ps.setString(3, item.getRentalNo());
+               ps.setString(4, item.getModelNo());
+               ps.setString(5, item.getWarrantExp());
+               ps.setString(6, item.getYear());
+               ps.setString(7, item.getRentalRate());
+               ps.setString(8, item.getPurchasePrice());
+               ps.setString(9, item.getOrderNo());
+               ps.setString(10, item.getEstArr());
+               ps.setString(11, item.getDueDate());
+               ps.setString(12, item.getCustomerCost());
+               return QueryPrepare.updateQuery(Main.conn, ps);
+           } catch (SQLException e) {
+               System.out.println(e.getMessage());
+               return null;
+           }
     }
+
 
     // -------------------------------tina-------------------------
     /**
@@ -651,7 +660,7 @@ public class QueryManager {
     }
 
     public static Date convertDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         java.util.Date utilDate;
         try {
             utilDate = sdf.parse(date);

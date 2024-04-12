@@ -416,6 +416,8 @@ public class RentEquipmentPage {
     private void SubmitInfo(EquipmentRentalObject item) {
 
         if (Main.databaseEnabled) {
+        	
+        	System.out.println("We are about to add");
             String addResult = QueryManager.addRentEquipment(item);
             System.out.println(addResult);
         } else {
@@ -425,10 +427,13 @@ public class RentEquipmentPage {
 
     private void beginSumitProcess() {
 
+    	System.out.println("We are in begin sub");
         String rentalNo = "0";
         for (HashMap.Entry<String, EquipmentRentalObject> entry : cart.entrySet()) {
             String key = entry.getKey();
             EquipmentRentalObject value = entry.getValue();
+            
+            System.out.println("We are in for loop");
             SubmitInfo(value);
             rentalNo = value.getRentalNo();
             DroneAssign.ScheduleDrone(Integer.parseInt(key), Integer.parseInt(value.getRentalNo()), true);

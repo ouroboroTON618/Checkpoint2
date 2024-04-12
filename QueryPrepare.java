@@ -11,8 +11,7 @@ public class QueryPrepare {
     // this class will take care of the prepared statement stuff.
     // this class might not even be needed.
 
-    private static PreparedStatement ps;
-
+   
     public QueryPrepare() {
 
     }
@@ -84,7 +83,7 @@ public class QueryPrepare {
      */
     public static String updateQuery(Connection conn, PreparedStatement sql) {
         try {
-            int rowsUpdated = ps.executeUpdate();
+            int rowsUpdated = sql.executeUpdate();
             if (rowsUpdated > 0) {
                 return "Database Updated Successfully";
             } else {
