@@ -241,7 +241,7 @@ public class QueryManager {
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, Drone_serial_no);
-            ps.setString(2, Drone_type);
+            ps.setInt(2, Integer.parseInt(Drone_type));
             ps.setInt(3, Rental_no);
             ps.setInt(4, Item_serial_no);
             ps.setString(5, Item_manuf);
@@ -714,17 +714,9 @@ public class QueryManager {
         }
     }
 
-    public static Date convertDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date utilDate;
-        try {
-            utilDate = sdf.parse(date);
-            return new java.sql.Date(utilDate.getTime());
-        } catch (ParseException e) {
-
-            e.printStackTrace();
-            return null;
-        }
+    public static ResultPackage getDroneType(int droneNo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDroneType'");
     }
 
 }

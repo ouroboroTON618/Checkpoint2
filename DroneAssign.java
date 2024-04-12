@@ -30,8 +30,13 @@ public class DroneAssign {
 
         } else {
 
-            // TODO:FIX ONCE COMBINED.
-            result = QueryManager.addNewReturnRecord(rentalNo, droneNo, itemSerialNo);
+            ResultPackage result1 = QueryManager.getDroneType(droneNo);
+            String type = LineGenerator.GetFirstDataVal(result1);
+
+            ResultPackage result2 = QueryManager.getManufact(itemSerialNo);
+            String manu = LineGenerator.GetFirstDataVal(result2);
+
+            result = QueryManager.addNewReturnRecord(rentalNo, type, droneNo, itemSerialNo, manu);
             // int Drone_serial_no, String Drone_type, int Rental_no,
             // int Item_serial_no, String Item_manuf
 
@@ -51,7 +56,7 @@ public class DroneAssign {
     public static void BeginDelivery(int droneNo) {
 
         System.out.println(LineGenerator.generateLine("Drone " + droneNo + " will on it's way!"));
-        String resultS= QueryManager.updateDroneDelivery(droneNo);
+        String resultS = QueryManager.updateDroneDelivery(droneNo);
         ResultPackage result = QueryManager.getDeliveryRecords(droneNo);
         TableDisplayGenerator.GenerateTable(result);
     }
