@@ -232,9 +232,22 @@ public class QueryManager {
      * @param itemSerialNo
      * @return
      */
-    public static String addNewReturnRecord(int rentalNo, int droneNo, int itemSerialNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
+    public static ResultPackage addNewReturnRecord(int Drone_serial_no, String Drone_type, int Rental_no, int Item_serial_no, String Item_manuf) {
+        String sql = "INSERT INTO Return (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) VALUES (?, ?, ?, ?, ?)\r\n"
+        		+ "";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, Drone_serial_no);
+            ps.setString(2, Drone_type);
+            ps.setInt(3, Rental_no);
+            ps.setInt(4, Item_serial_no);
+            ps.setString(5, Item_manuf);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        
     }
 
     /**
@@ -313,9 +326,21 @@ public class QueryManager {
      * //You can get the user's member id for warehouse info at USER_INFO.MEMBER_ID.
      * Look at utilities file
      */
-    public static String addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addNewDeliveryRecord'");
+    public static ResultPackage addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
+    	String sql = "INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) "
+    			+ "VALUES (?, (SELECT Type_id FROM DRONE WHERE Serial_no = ?), ?, ?, (SELECT Manufacturer FROM EQUIPMENT WHERE Serial_no = ?))";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, droneNo);
+            ps.setInt(2, droneNo);
+            ps.setInt(3, rentalNo);
+            ps.setInt(4, itemSerialNo);
+            ps.setInt(5, itemSerialNo);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
