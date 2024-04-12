@@ -7,12 +7,6 @@ public class DroneAssign {
 
     public static String FindDrone(int serialno) {
 
-        // get item weight from serial number
-        String itemWeight = QueryManager.getItemWeight(serialno);
-        // get warehouse
-        String warehouse = QueryManager.getWarehouse(USER_INFO.MEMBER_ID);
-        // get distance of the item
-        String dist = QueryManager.getItemWeight(serialno);
         // Find drone models id's and their model id info of avaliable drones that meet
         // this info
         ResultPackage result = QueryManager.getRequiredDrone();
@@ -28,14 +22,19 @@ public class DroneAssign {
 
         String result = "";
         if (delivery) {
-            result = QueryManager.addNewDeliveryRecord(rentalNo, droneNo, itemSerialNo);
+            String resultL = QueryManager.addNewDeliveryRecord(rentalNo, droneNo, itemSerialNo);
             ResultPackage dataResult = QueryManager.getDeliveryRecords(rentalNo);
 
             System.out.println(LineGenerator.generateLine("Drone has been assigned"));
             TableDisplayGenerator.GenerateTable(dataResult);
 
         } else {
+
+            // TODO:FIX ONCE COMBINED.
             result = QueryManager.addNewReturnRecord(rentalNo, droneNo, itemSerialNo);
+            // int Drone_serial_no, String Drone_type, int Rental_no,
+            // int Item_serial_no, String Item_manuf
+
             ResultPackage dataResult = QueryManager.getReturnRecords(rentalNo);
             System.out.println(
                     LineGenerator.generateLine(

@@ -174,9 +174,9 @@ public class QueryManager {
      * @return
      */
     public static ResultPackage getItemWeight(int serialno) {
-    	String sql = "SELECT Weight\r\n"
-    			+ "FROM EQP_TYPE AS TYPE JOIN EQP_ITEM ITEM ON TYPE.Model_no = ITEM.Model_no\r\n"
-    			+ "WHERE Serial_no = ?";
+        String sql = "SELECT Weight\r\n"
+                + "FROM EQP_TYPE AS TYPE JOIN EQP_ITEM ITEM ON TYPE.Model_no = ITEM.Model_no\r\n"
+                + "WHERE Serial_no = ?";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, serialno);
@@ -194,23 +194,24 @@ public class QueryManager {
      */
     public static ResultPackage getRequiredDrone() {
         String sql = "SELECT Serial_no, Type_id, Model_no\r\n"
-        		+ "FROM DRONE AS d JOIN DRONE_TYPE AS t ON d.Type_id=t.Type_id\r\n"
-        		+ "WHERE d.Inactive= 'Active'";
+                + "FROM DRONE AS d JOIN DRONE_TYPE AS t ON d.Type_id=t.Type_id\r\n"
+                + "WHERE d.Inactive= 'Active'";
         return QueryPrepare.sqlQuery(Main.conn, sql);
-       
+
     }
 
     /**
-     * Get the closest warehouse of the member based on the given member ID. MIGHT NEED FIX DUE USER_INFO
+     * Get the closest warehouse of the member based on the given member ID. MIGHT
+     * NEED FIX DUE USER_INFO
      * 
      * @param memberId
      * @return
      */
     public static ResultPackage getWarehouse(USER_INFO memberId) {
-    	int member_id = (int) memberId.getValue();
+        int member_id = (int) memberId.getValue();
         String sql = "SELECT wh.Closest_warehouse\r\n"
-        		+ "FROM MEMBER AS m JOIN MEMBER_CLOSE_WH AS wh ON m.Address=wh.Address\r\n"
-        		+ "WHERE m.Member_id=?";
+                + "FROM MEMBER AS m JOIN MEMBER_CLOSE_WH AS wh ON m.Address=wh.Address\r\n"
+                + "WHERE m.Member_id=?";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, member_id);
@@ -232,9 +233,10 @@ public class QueryManager {
      * @param itemSerialNo
      * @return
      */
-    public static ResultPackage addNewReturnRecord(int Drone_serial_no, String Drone_type, int Rental_no, int Item_serial_no, String Item_manuf) {
+    public static String addNewReturnRecord(int Drone_serial_no, String Drone_type, int Rental_no,
+            int Item_serial_no, String Item_manuf) {
         String sql = "INSERT INTO Return (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) VALUES (?, ?, ?, ?, ?)\r\n"
-        		+ "";
+                + "";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, Drone_serial_no);
@@ -242,12 +244,12 @@ public class QueryManager {
             ps.setInt(3, Rental_no);
             ps.setInt(4, Item_serial_no);
             ps.setString(5, Item_manuf);
-            return QueryPrepare.sqlQuery(Main.conn, ps);
+            return QueryPrepare.updateQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
-        
+
     }
 
     /**
@@ -326,9 +328,9 @@ public class QueryManager {
      * //You can get the user's member id for warehouse info at USER_INFO.MEMBER_ID.
      * Look at utilities file
      */
-    public static ResultPackage addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
-    	String sql = "INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) "
-    			+ "VALUES (?, (SELECT Type_id FROM DRONE WHERE Serial_no = ?), ?, ?, (SELECT Manufacturer FROM EQUIPMENT WHERE Serial_no = ?))";
+    public static String addNewDeliveryRecord(int rentalNo, int droneNo, int itemSerialNo) {
+        String sql = "INSERT INTO DELIVERY (Drone_serial_no, Drone_type, Rental_no, Item_serial_no, Item_manuf) "
+                + "VALUES (?, (SELECT Type_id FROM DRONE WHERE Serial_no = ?), ?, ?, (SELECT Manufacturer FROM EQUIPMENT WHERE Serial_no = ?))";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, droneNo);
@@ -336,7 +338,7 @@ public class QueryManager {
             ps.setInt(3, rentalNo);
             ps.setInt(4, itemSerialNo);
             ps.setInt(5, itemSerialNo);
-            return QueryPrepare.sqlQuery(Main.conn, ps);
+            return QueryPrepare.updateQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
@@ -440,7 +442,7 @@ public class QueryManager {
 
     }
 
-    //-------------------------------tina-------------------------
+    // -------------------------------tina-------------------------
     /**
      * Get all the model Numbers from equp_type
      * 
@@ -494,7 +496,7 @@ public class QueryManager {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getBulkOrder'");
     }
-    
+
     public static Date convertDate(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date utilDate;
@@ -505,7 +507,7 @@ public class QueryManager {
 
             e.printStackTrace();
             return null;
-        } 
+        }
     }
 
 }
