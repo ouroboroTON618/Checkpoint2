@@ -6,6 +6,7 @@ public class LineGenerator {
     private static boolean debug = false;
 
     public static String generateLine(String line) {
+    	
 
         String basis = "------------------------------------------------------------------";
 

@@ -6,31 +6,33 @@ public class EquipmentObject {
     public EquipmentObject() {
         inputs = new HashMap<>();
         // Initialize the map with column names and "null" values
-//        inputs.put("Serial_no", "null");
-//        inputs.put("Manufacturer", "null");
-//
-//        inputs.put("Model_no", "null");
-//
-//        inputs.put("Warrant_exp", "null");
-//        inputs.put("Year", "null");
-//        inputs.put("Rental_rate", "null");
-//        inputs.put("Rental_status", "null");
-//        inputs.put("Purchase_pr", "null");
-//        inputs.put("Order_no", "null");
+        inputs.put("Serial_no", "null");
+        inputs.put("Manufacturer", "null");
+
+        inputs.put("Model_no", "null");
+
+        inputs.put("Warrant_exp", "null");
+        inputs.put("Year", "null");
+        inputs.put("Rental_rate", "null");
+        inputs.put("Rental_status", "null");
+        inputs.put("Purchase_pr", "null");
+        inputs.put("Order_no", "null");
         
         
         // Initialize the map with column names and "null" values
-        inputs.put("Serial_no", "123456");
-        inputs.put("Manufacturer", "ava");
-
-        inputs.put("Model_no", "930");
-
-        inputs.put("Warrant_exp", "2024/01/22");
-        inputs.put("Year", "2024");
-        inputs.put("Rental_rate", "63");
-        inputs.put("Rental_status", "Avaliable");
-        inputs.put("Purchase_pr", "652");
-        inputs.put("Order_no", "12345");
+//			
+//        TEST CASE
+//        inputs.put("Serial_no", "122056");
+//        inputs.put("Manufacturer", "Joel");
+//
+//        inputs.put("Model_no", "930");
+//
+//        inputs.put("Warrant_exp", "2024/01/22");
+//        inputs.put("Year", "2024");
+//        inputs.put("Rental_rate", "63");
+//        inputs.put("Rental_status", "Avaliable");
+//        inputs.put("Purchase_pr", "652");
+//        inputs.put("Order_no", "12345");
     }
 
     public boolean checkCompleted() {

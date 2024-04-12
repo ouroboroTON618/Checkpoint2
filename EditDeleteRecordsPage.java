@@ -120,6 +120,7 @@ public class EditDeleteRecordsPage {
         while (menuOption.toLowerCase().equals("h")) {
             // display the equipment list and its serial numbers.
             System.out.println("Display Place holder table that shows equip list and its serial numbers");
+            DisplayEquipmentTable();
             LineGenerator.MainOrChange();
             System.out.println(LineGenerator.generateLine("Otherwise: Enter serial number of record to edit"));
             System.out.print("Option: ");
@@ -151,10 +152,10 @@ public class EditDeleteRecordsPage {
     private void EditExistingRecord(String menuOption) {
 
         // Get name of menu option, current placeholder is implemented
-        String equipName = "Equipment Name Placeholder(SerialNumber)";
+       // String equipName = "Equipment Name Placeholder(SerialNumber)";
        
 
-        System.out.println(LineGenerator.generateLine("Edit" + equipName));
+        System.out.println(LineGenerator.generateLine("Edit " + menuOption));
         System.out.println(LineGenerator.generateLine("Please Enter the Exact Name of the Field to Edit"));
 
         LineGenerator.MainOrChange();
@@ -184,6 +185,8 @@ public class EditDeleteRecordsPage {
         
         if (Main.databaseEnabled) {
             String result = QueryManager.updateFieldRecords(fieldOption, updateValue);
+            System.out.println("DEBUG RESULT" + result);
+
             return result;
         } else {
             return "Database Disabled: Dta Updated!";
@@ -223,4 +226,58 @@ public class EditDeleteRecordsPage {
 //        TableDisplayGenerator.GenerateTableWithData(placeholder, tableData);
 //        return;
 //    }
+    
+//    private void DisplayEquipmentTable() {
+//        System.out.println(LineGenerator.generateLine("Equipment List and Serial Numbers"));
+//
+//        // Fetch equipment records from QueryManager
+//        List<String> equipmentRecords = new ArrayList<>();
+//        for (int serialNumber : optionMap.keySet()) {
+//            ResultPackage result = QueryManager.getEquipmentRecord(serialNumber);
+//            if (result != null && result.getData() != null) {
+//                String equipmentInfo = result.getData().toString(); // Assuming result.getData() returns equipment information
+//                equipmentRecords.add(equipmentInfo);
+//            }
+//        }
+//
+//        // Display equipment records
+//        if (!equipmentRecords.isEmpty()) {
+//            for (String equipmentInfo : equipmentRecords) {
+//                System.out.println(equipmentInfo);
+//            }
+//        } else {
+//            System.out.println("No equipment records found.");
+//        }
+//    }
+    
+    private void DisplayEquipmentTable() {
+        System.out.println(LineGenerator.generateLine("Equipment List and Serial Numbers"));
+
+        // Fetch all equipment records from QueryManager
+        List<String> equipmentRecords = new ArrayList<>();
+        for (int serialNumber : optionMap.keySet()) {
+            ResultPackage result = QueryManager.getEquipmentRecord(serialNumber);
+            if (result != null && result.getData() != null) {
+                String equipmentInfo = result.getData().toString(); // Assuming result.getData() returns equipment information
+                equipmentRecords.add(equipmentInfo);
+            } else {
+                System.out.println("Failed to fetch data for serial number: " + serialNumber);
+            }
+        }
+
+        // Display equipment records
+        if (!equipmentRecords.isEmpty()) {
+            for (String equipmentInfo : equipmentRecords) {
+                System.out.println(equipmentInfo);
+            }
+        } else {
+            System.out.println("No equipment records found.");
+        }
+    }
+    
+    
+
+    
 }
+
+

@@ -1,3 +1,5 @@
+
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -17,12 +19,10 @@ public class QueryManager {
     private static PreparedStatement ps;
 
     public static String updateFieldRecords(String fieldOption, String updateValue) {
-
-        String sql = "UPDATE EQUIPMENT SET ? = ?";
+        String sql = "UPDATE EQUIPMENT SET " + fieldOption + " = ?";
         try {
             ps = Main.conn.prepareStatement(sql);
-            ps.setString(1, fieldOption);
-            ps.setString(2, updateValue);
+            ps.setString(1, updateValue);
             return QueryPrepare.updateQuery(Main.conn, ps);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -73,6 +73,18 @@ public class QueryManager {
 
     public static ResultPackage getRecord(int serial_number) {
         String sql = "SELECT * FROM EQP_ITEM WHERE Serial_no = ?;";
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, serial_number);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+    
+    public static ResultPackage getEquipmentRecord(int serial_number) {
+        String sql = "SELECT * FROM EQUIPMENT WHERE Serial_no = ?;";
         try {
             ps = Main.conn.prepareStatement(sql);
             ps.setInt(1, serial_number);
