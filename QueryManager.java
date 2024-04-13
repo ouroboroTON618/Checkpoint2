@@ -117,8 +117,11 @@ public class QueryManager {
     }
 
     public static ResultPackage getPopularItem() {
-        String sql = "SELECT Serial_no, Manufacturer, DATED IFF(second, Arr, IF (Pickup IS NULL, GETDATE(), Pickup))/3600.0 AS Rental_Hours "
-                + "FROM EQUIPMENT AS E WHERE E.Arr IS NOT NULL GROUP BY Serial_no, Manufacturer ORDER BY Rental_Hours DESC";
+        String sql = "SELECT Serial_no, Manufacturer, Model_no, COUNT(*) AS Rental_count\r\n"
+        		+ "FROM EQUIPMENT\r\n"
+        		+ "GROUP BY Serial_no, Manufacturer, Model_no\r\n"
+        		+ "ORDER BY Rental_count DESC\r\n"
+        		+ "LIMIT 1;";
         return QueryPrepare.sqlQuery(Main.conn, sql);
     }
 
@@ -473,48 +476,48 @@ public class QueryManager {
 
     }
     
-    /**
-     * Update the equipment table conditon the serial number paramter.
-     * 
-     * @param int1
-     * @param conditon
-     * @return
-     */
-    public static ResultPackage CheckUnreturnedRental(int rentalNo) {
-        String sql = "SELECT Serial_no FROM EQUIPMENT WHERE Rental_no = ? AND Return_cond IS NULL";
-
-        try {
-            ps = Main.conn.prepareStatement(sql);
-            ps.setInt(1, rentalNo);
-            return QueryPrepare.sqlQuery(Main.conn, ps);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-        
-    }
-    
-    
-    /**
-     * Update the equipment table conditon the serial number paramter.
-     * 
-     * @param int1
-     * @param conditon
-     * @return
-     */
-    public static ResultPackage CheckUnreturnedSerial(int SerialNo) {
-        String sql = "SELECT Rental_no FROM EQUIPMENT WHERE Serial_no = ? AND Return_cond IS NULL";
-
-        try {
-            ps = Main.conn.prepareStatement(sql);
-            ps.setInt(1, SerialNo);
-            return QueryPrepare.sqlQuery(Main.conn, ps);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-        
-    }
+//    /**
+//     * Update the equipment table conditon the serial number paramter.
+//     * 
+//     * @param int1
+//     * @param conditon
+//     * @return
+//     */
+//    public static ResultPackage CheckUnreturnedRental(int rentalNo) {
+//        String sql = "SELECT Serial_no FROM EQUIPMENT WHERE Rental_no = ? AND Return_cond IS NULL";
+//
+//        try {
+//            ps = Main.conn.prepareStatement(sql);
+//            ps.setInt(1, rentalNo);
+//            return QueryPrepare.sqlQuery(Main.conn, ps);
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//            return null;
+//        }
+//        
+//    }
+//    
+//    
+//    /**
+//     * Update the equipment table conditon the serial number paramter.
+//     * 
+//     * @param int1
+//     * @param conditon
+//     * @return
+//     */
+//    public static ResultPackage CheckUnreturnedSerial(int SerialNo) {
+//        String sql = "SELECT Rental_no FROM EQUIPMENT WHERE Serial_no = ? AND Return_cond IS NULL";
+//
+//        try {
+//            ps = Main.conn.prepareStatement(sql);
+//            ps.setInt(1, SerialNo);
+//            return QueryPrepare.sqlQuery(Main.conn, ps);
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//            return null;
+//        }
+//        
+//    }
 
     /**
      * Get all the serial Numbers in Equipment table. Only 1 column

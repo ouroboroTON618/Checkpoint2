@@ -77,7 +77,7 @@ public class UsefulReportsPage {
     private void PopularItem() {
 
         if (Main.databaseEnabled) {
-            ResultPackage result = QueryManager.getItemsCheckedOut();
+            ResultPackage result = QueryManager.getPopularItem();
             TableDisplayGenerator.GenerateTable(result);
         } else {
             System.out.println("Database Disabled: Popular Item Query Success");

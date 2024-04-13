@@ -165,7 +165,8 @@ public class ReturnRentalPage {
     private String SerialNumber() {
 
         String serialNo = "";
-        while (!VerifyInputs.verifySerialNo(serialNo) && !UnreturnedSerialNo(serialNo)) {
+//        while (!VerifyInputs.verifySerialNo(serialNo) && !UnreturnedSerialNo(serialNo)) {
+        while (!VerifyInputs.verifySerialNo(serialNo)) {
             System.out.println(LineGenerator.generateLine("Enter serial number of item: "));
             System.out.print("Serial Number: ");
             serialNo = scanner.nextLine();
@@ -173,21 +174,21 @@ public class ReturnRentalPage {
         return serialNo;
     }
     
-    private boolean UnreturnedSerialNo(String SerialNo) {
-    	if (SerialNo.isEmpty()) {
-    		return false;
-    	}
-    	ResultPackage result = QueryManager.CheckUnreturnedSerial(Integer.parseInt(SerialNo));
-    	if (!result.getData().isEmpty()) {
-    		return true;
-    	}
-    	
-    	return false;
-    }
+//    private boolean UnreturnedSerialNo(String SerialNo) {
+//    	if (SerialNo.isEmpty()) {
+//    		return false;
+//    	}
+//    	ResultPackage result = QueryManager.CheckUnreturnedSerial(Integer.parseInt(SerialNo));
+//    	if (!result.getData().isEmpty()) {
+//    		return true;
+//    	}
+//    	
+//    	return false;
+//    }
 
     private boolean RentalNo() {
         String rentalNo = "";
-        while (!VerifyInputs.VerifyRentalNo(rentalNo) && !Unreturned(rentalNo)) {
+        while (!VerifyInputs.VerifyRentalNo(rentalNo)) {
             System.out.println(LineGenerator.generateLine("Enter RentalNo of Item to Return: "));
             System.out.println("Rental_NO: ");
             rentalNo = scanner.nextLine();
@@ -195,18 +196,18 @@ public class ReturnRentalPage {
         curr_rentalNo = rentalNo;
         return QueryRentalNo(rentalNo);
     }
-    
-    private boolean Unreturned(String rentalNo) {
-    	if (rentalNo.isEmpty()) {
-    		return false;
-    	}
-    	ResultPackage result = QueryManager.CheckUnreturnedRental(Integer.parseInt(rentalNo));
-    	if (!result.getData().isEmpty()) {
-    		return true;
-    	}
-    	
-    	return false;
-    }
+//    
+//    private boolean Unreturned(String rentalNo) {
+//    	if (rentalNo.isEmpty()) {
+//    		return false;
+//    	}
+//    	ResultPackage result = QueryManager.CheckUnreturnedRental(Integer.parseInt(rentalNo));
+//    	if (!result.getData().isEmpty()) {
+//    		return true;
+//    	}
+//    	
+//    	return false;
+//    }
 
     private boolean QueryRentalNo(String rentalNo) {
         if (Main.databaseEnabled) {
