@@ -472,6 +472,49 @@ public class QueryManager {
         }
 
     }
+    
+    /**
+     * Update the equipment table conditon the serial number paramter.
+     * 
+     * @param int1
+     * @param conditon
+     * @return
+     */
+    public static ResultPackage CheckUnreturnedRental(int rentalNo) {
+        String sql = "SELECT Serial_no FROM EQUIPMENT WHERE Rental_no = ? AND Return_cond IS NULL";
+
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, rentalNo);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        
+    }
+    
+    
+    /**
+     * Update the equipment table conditon the serial number paramter.
+     * 
+     * @param int1
+     * @param conditon
+     * @return
+     */
+    public static ResultPackage CheckUnreturnedSerial(int SerialNo) {
+        String sql = "SELECT Rental_no FROM EQUIPMENT WHERE Serial_no = ? AND Return_cond IS NULL";
+
+        try {
+            ps = Main.conn.prepareStatement(sql);
+            ps.setInt(1, SerialNo);
+            return QueryPrepare.sqlQuery(Main.conn, ps);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        
+    }
 
     /**
      * Get all the serial Numbers in Equipment table. Only 1 column
