@@ -8,7 +8,8 @@ import java.sql.SQLException;
 public class QueryConnection {
     // This class will set up the entire connection part of the database.
 
-    private static String DATABASE = "RentalServiceFinal.db";
+	//For final Project: Use RentalServiceUntouched, its the unmodified db that hasn't been affected by testing.
+    private static String DATABASE = "RentalServiceUntouched.db";
 
     public static Connection conn;
 
